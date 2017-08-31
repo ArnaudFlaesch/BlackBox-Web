@@ -2,6 +2,8 @@
 
 Partie Front-End d'une plateforme Cloud de partage de fichiers.
 
+
+
 Codacy (Code Quality)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e0d56f79ce204fbfa4243689769e46d1)](https://www.codacy.com/app/arnaudflaesch/BlackBox-Web?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ArnaudFlaesch/BlackBox-Web&amp;utm_campaign=Badge_Grade)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/e0d56f79ce204fbfa4243689769e46d1)](https://www.codacy.com/app/arnaudflaesch/BlackBox-Web?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ArnaudFlaesch/BlackBox-Web&amp;utm_campaign=Badge_Coverage)

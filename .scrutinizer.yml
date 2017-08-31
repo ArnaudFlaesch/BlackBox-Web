@@ -16,6 +16,10 @@ build:
                     file: 'coverage/clover.xml'
                     format: 'clover'
 
+checks:
+    javascript: true
+
+
 filter:
     excluded_paths:
         - node_modules/
