@@ -1,0 +1,21 @@
+build:
+    dependencies:
+        before:
+            - npm install -g portfinder @angular/cli istanbul
+    environment:
+            node: '6.9'
+
+    tests:
+        override:
+            - jshint-run
+            - export DISPLAY=:99.0
+            - sh -e /etc/init.d/xvfb start
+            -
+                command : 'npm test'
+                coverage:
+                    file: 'coverage/clover.xml'
+                    format: 'clover'
+
+filter:
+    excluded_paths:
+        - node_modules/
