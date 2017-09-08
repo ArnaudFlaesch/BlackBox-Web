@@ -1,0 +1,15 @@
+<nav>
+    <a routerLink="/register" routerLinkActive="active">Créer un compte</a>
+</nav>
+
+<div>
+    <div>
+        <label>Adresse mail (login): </label>
+        <input [(ngModel)]="this.credentials.email">
+    </div>
+    <div>
+        <label>Mot de passe: </label>
+        <input [(ngModel)]="this.credentials.password" type="password">
+    </div>
+    <button (click)="logUser()">Se connecter</button>
+</div>

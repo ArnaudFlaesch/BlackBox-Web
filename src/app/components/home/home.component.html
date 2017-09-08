@@ -1,0 +1,42 @@
+<div style="margin-top: 1%">
+    <div class="row">
+        <div class="col-md-2">
+            <span class="list-group-item list-group-item-action active" data-toggle="list" role="tab" aria-controls="home">Bienvenue, {{userData.firstname}} {{userData.name}}</span>
+            <br />
+            <div class="list-group" id="list-tab" role="tablist">
+                <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="home">Dossier personnel</a>
+                <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="profile">Dossiers / Fichiers partagés</a>
+                <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="messages">Modifier ses informations personnelles</a>
+                <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" (click)="logout()" aria-controls="settings">Déconnexion</a>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="row">
+                <div class="col-md-6">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Dossier personnel</a></li>
+                        <li class="breadcrumb-item"><a href="#">Sous dossier</a></li>
+                        <li class="breadcrumb-item active">Sous sous dossier</li>
+                    </ol>
+                </div>
+                <div class="col-md-3">
+                    <span>
+                        <button type="button" class="btn btn-secondary">Nouveau fichier</button>
+                        <button type="button" class="btn btn-secondary">Nouveau dossier</button>
+                    </span>
+                </div>
+                <div class="col-md-3">
+                    <span class="form-inline" style="position: absolute; left: -3em">
+                        <input class="form-control" type="text" placeholder="Rechercher un fichier ou un dossier" aria-label="Search" style="width:250%">
+                    </span>
+                </div>
+            </div>
+
+            <div class="dropzone" appHome>
+                <div class="text-wrapper">
+                    <div class="centered">Drop your file here!</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

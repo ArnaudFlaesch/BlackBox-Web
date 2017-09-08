@@ -1,7 +1,9 @@
-<div style="text-align:center">
-  <h1>Bienvenue dans l'application {{title}} !</h1>
+<div style="background-color: darkgrey">
+    <div class="row" style="margin-left: 30%" (click)="goToHome()" href="#">
+        <h2>
+            <span class="col"><img src="../assets/icon.png" /></span>
+            <span class="col" style="margin-left: 1.5em">BlackBox - Stockage et partage de fichiers sécurisés</span>
+        </h2>
+    </div>
 </div>
-<ul>
-
-</ul>
-
+<router-outlet></router-outlet>

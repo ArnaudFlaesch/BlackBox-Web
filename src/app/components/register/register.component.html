@@ -1,0 +1,23 @@
+<nav>
+  <a routerLink="/login" routerLinkActive="active">Se connecter</a>
+</nav>
+
+<div>
+    <div>
+    <label>Nom: </label>
+    <input [(ngModel)]="this.registeredUser.name">
+    </div>
+    <div>
+    <label>Prénom: </label>
+    <input [(ngModel)]="this.registeredUser.firstname">
+    </div>
+    <div>
+    <label>Adresse mail (login): </label>
+    <input [(ngModel)]="this.registeredUser.email">
+    </div>
+    <div>
+    <label>Mot de passe: </label>
+    <input [(ngModel)]="this.registeredUser.password" type="password">
+    </div>
+    <button (click)="registerUser()">Valider la création du compte</button>
+</div>
