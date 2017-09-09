@@ -18,7 +18,7 @@ export class UserService {
         this.headers.append("Content-Type" , "application/json");
     }
 
-    public getUserData(): User {
+    public getUserDataFromSession(): User {
         return (JSON.parse(localStorage.getItem(this.tokenKey)));
     }
 

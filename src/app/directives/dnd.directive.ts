@@ -5,9 +5,6 @@ import {FileService} from "../service/file.service";
   selector: "[appHome]"
 })
 export class DndDirective {
-    @Input() private allowed_extensions: Array<string> = [];
-    @Output() private filesChangeEmiter: EventEmitter<File[]> = new EventEmitter();
-    @Output() private filesInvalidEmiter: EventEmitter<File[]> = new EventEmitter();
     @HostBinding("style.background") private background = "#eee";
 
     constructor(private fileService: FileService) { }
@@ -28,17 +25,6 @@ export class DndDirective {
         evt.preventDefault();
         evt.stopPropagation();
         this.background = "#eee";
-
-
-
-        let files = evt.dataTransfer.files;
-        let valid_files : Array<File> = [];
-        let invalid_files : Array<File> = [];
-
-        this.fileService.uploadFiles(files)
-
-        this.filesChangeEmiter.emit(valid_files);
-        this.filesInvalidEmiter.emit(invalid_files);
+        this.fileService.uploadFiles(evt.dataTransfer.files);
     }
-
 }

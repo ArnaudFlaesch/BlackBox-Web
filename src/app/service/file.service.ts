@@ -9,10 +9,18 @@ import {Observable} from "rxjs/Observable";
 export class FileService {
 
     private headers = new Headers();
-    private SERVICES_URL = "http://localhost:3000/file";
+    private SERVICES_URL = "http://localhost:3000/element";
 
     public constructor(private http: Http) {
         this.headers.append("Accept", "application/json");
+    }
+
+    public getContentFromFolder(userId: Number, elementName: String, path: String): Promise<String[]> {
+        return this.http
+            .get(this.SERVICES_URL + "/directory", {headers: this.headers, params: {userId : userId, elementName : elementName, path: path}})
+            .toPromise()
+            .then(res => res.json() as String[])
+            .catch(this.handleError);
     }
 
     public uploadFiles(files: File[]) {
@@ -21,7 +29,7 @@ export class FileService {
                 let file = files[i];
                 let formData: FormData = new FormData();
                 formData.append("documents", file);
-                this.http.post(this.SERVICES_URL + "/upload", formData, {headers: this.headers})
+                this.http.post(this.SERVICES_URL + "/upload", formData, {headers: this.headers, params: {path: "test"}})
                     .toPromise()
                     .then(res => res.json())
                     .catch(this.handleError);
