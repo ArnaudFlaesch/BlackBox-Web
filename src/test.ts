@@ -18,6 +18,12 @@ import {RouterTestingModule} from "@angular/router/testing";
 import {HomeComponent} from "./app/components/home/home.component";
 import {RegisterComponent} from "./app/components/register/register.component";
 import {UserService} from "./app/service/user.service";
+import {FileService} from "./app/service/file.service";
+import {MdDialog, MdDialogModule} from "@angular/material";
+import {Overlay, OverlayContainer} from "@angular/cdk/overlay";
+import {ScrollStrategyOptions} from "@angular/cdk/overlay";
+import {ScrollDispatcher, ViewportRuler} from "@angular/cdk/scrolling";
+import {Platform} from "@angular/cdk/platform";
 
 // Unfortunately there's no typing for the `__karma__` variable. Just declare it as any.
 declare const __karma__: any;
@@ -39,9 +45,12 @@ beforeEach(async(() => {
             HomeComponent,
             RegisterComponent
         ],
-        providers: [UserService],
+        providers: [
+            UserService, FileService
+        ],
         imports: [
             FormsModule,
+            MdDialogModule,
             HttpModule,
             RouterTestingModule
         ]

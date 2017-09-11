@@ -5,3 +5,19 @@
     background-color: #eee;
     border: dotted 1px #aaa;
 }
+
+.img-with-text {
+    max-width: 5em;
+    display: inline-block;
+}
+
+.img-with-text span {
+    max-width: 5em;
+    word-wrap: break-word;
+    text-overflow: ellipsis;
+}
+
+.img-with-text img {
+    margin : 0px;
+    display: block;
+}

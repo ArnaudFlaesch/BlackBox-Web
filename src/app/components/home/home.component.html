@@ -14,9 +14,8 @@
             <div class="row">
                 <div class="col-md-6">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">Dossier personnel</a></li>
-                        <li class="breadcrumb-item"><a href="#">Sous dossier</a></li>
-                        <li class="breadcrumb-item active">Sous sous dossier</li>
+                        <li *ngFor="let folder of navPath" class="breadcrumb-item"><a href="#">{{ folder }}</a></li>
+
                     </ol>
                 </div>
                 <div class="col-md-3">
@@ -33,8 +32,23 @@
             </div>
 
             <div class="dropzone" appHome>
-                <div *ngFor="let element of _searchList">{{ element }}</div>
+                <span class="img-with-text" *ngFor="let element of _searchList" (dblclick)="getElement(element)"  style="margin : 0.5em">
+                    <img [src]="'../assets/' + getIcon(element) + '_icon.png'" />
+                    <span>{{ element }}</span>
+                </span>
             </div>
         </div>
     </div>
 </div>
+
+
+
+<ol>
+    <li>
+
+    </li>
+    <li>
+        <button md-raised-button (click)="openDialog()">Pick one</button>
+    </li>
+</ol>
+

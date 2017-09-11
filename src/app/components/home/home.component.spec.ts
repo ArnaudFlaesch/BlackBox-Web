@@ -4,6 +4,8 @@ import { HomeComponent } from "./home.component";
 import {DndDirective} from "../../directives/dnd.directive";
 import {Http, HttpModule} from "@angular/http";
 import {UserService} from "../../service/user.service";
+import {FileService} from "../../service/file.service";
+import {MdDialog} from "@angular/material";
 
 describe("HomeComponent", () => {
   let component: HomeComponent;
@@ -13,7 +15,7 @@ describe("HomeComponent", () => {
     TestBed.configureTestingModule({
         declarations: [HomeComponent],
         imports: [HttpModule],
-        providers: [UserService]
+        providers: [UserService, FileService]
     }).compileComponents();
   }));
 

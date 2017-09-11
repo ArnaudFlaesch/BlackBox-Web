@@ -11,22 +11,32 @@ import { RegisterComponent } from "./components/register/register.component";
 import { HomeComponent } from "./components/home/home.component";
 import { DndDirective } from "./directives/dnd.directive";
 import {FileService} from "./service/file.service";
+import {DialogNewFileComponent, DialogNewFolderComponent, DialogUserInfoComponent} from "./components/dialogs/DialogManager";
+import {MdDialogModule, MdFormFieldModule} from "@angular/material";
+import {NoopAnimationsModule} from "@angular/platform-browser/animations";
 
 @NgModule({
-  declarations: [
-    BlackBoxComponent,
-    LoginComponent,
-    RegisterComponent,
-    HomeComponent,
-    DndDirective
+    declarations: [
+        BlackBoxComponent,
+        LoginComponent,
+        RegisterComponent,
+        HomeComponent,
+        DndDirective,
+        DialogNewFileComponent,
+        DialogNewFolderComponent,
+        DialogUserInfoComponent
   ],
   imports: [
       AppRoutingModule,
       BrowserModule,
       FormsModule,
-      HttpModule
+      HttpModule,
+      MdDialogModule,
+      MdFormFieldModule,
+      NoopAnimationsModule
   ],
-  providers: [UserService, FileService],
-  bootstrap: [BlackBoxComponent]
+    entryComponents: [DialogNewFileComponent, DialogNewFolderComponent, DialogUserInfoComponent],
+    providers: [UserService, FileService],
+    bootstrap: [BlackBoxComponent]
 })
 export class AppModule { }

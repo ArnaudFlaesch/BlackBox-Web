@@ -1,5 +1,6 @@
-import {Directive, EventEmitter, HostBinding, HostListener, Input, Output} from "@angular/core";
+import {Directive, HostBinding, HostListener } from "@angular/core";
 import {FileService} from "../service/file.service";
+import {HomeComponent} from "../components/home/home.component";
 
 @Directive({
   selector: "[appHome]"
@@ -7,7 +8,7 @@ import {FileService} from "../service/file.service";
 export class DndDirective {
     @HostBinding("style.background") private background = "#eee";
 
-    constructor(private fileService: FileService) { }
+    constructor(private homeComponent: HomeComponent, private fileService: FileService) { }
 
     @HostListener("dragover", ["$event"]) public onDragOver(evt) {
         evt.preventDefault();
@@ -25,6 +26,7 @@ export class DndDirective {
         evt.preventDefault();
         evt.stopPropagation();
         this.background = "#eee";
-        this.fileService.uploadFiles(evt.dataTransfer.files);
+        this.fileService.uploadFiles(evt.dataTransfer.files, this.homeComponent.currentFolder, this.homeComponent.userData._id);
+        this.homeComponent.displayFolderContents(this.homeComponent.currentFolder);
     }
 }
