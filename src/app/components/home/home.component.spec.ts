@@ -3,8 +3,8 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { HomeComponent } from "./home.component";
 import {DndDirective} from "../../directives/dnd.directive";
 import {Http, HttpModule} from "@angular/http";
-import {UserService} from "../../service/user.service";
-import {FileService} from "../../service/file.service";
+import {UserService} from "../../services/user.service";
+import {FileService} from "../../services/file.service";
 import {MdDialog} from "@angular/material";
 
 describe("HomeComponent", () => {

@@ -6,7 +6,7 @@
             <div class="list-group" id="list-tab" role="tablist">
                 <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" (click)="displayPersonnalFolder()">Dossier personnel</a>
                 <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="profile">Dossiers / Fichiers partagés</a>
-                <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" aria-controls="messages">Modifier ses informations personnelles</a>
+                <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" (click)="openDialogUserInfo()">Gérer son compte</a>
                 <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" (click)="logout()" aria-controls="settings">Déconnexion</a>
             </div>
         </div>
@@ -20,8 +20,8 @@
                 </div>
                 <div class="col-md-3">
                     <span>
-                        <button type="button" class="btn btn-secondary">Nouveau fichier</button>
-                        <button type="button" class="btn btn-secondary">Nouveau dossier</button>
+                        <button type="button" (click)="openDialogNewFile()" class="btn btn-secondary">Nouveau fichier</button>
+                        <button type="button" (click)="openDialogNewFolder()" class="btn btn-secondary">Nouveau dossier</button>
                     </span>
                 </div>
                 <div class="col-md-3">
@@ -40,15 +40,3 @@
         </div>
     </div>
 </div>
-
-
-
-<ol>
-    <li>
-
-    </li>
-    <li>
-        <button md-raised-button (click)="openDialog()">Pick one</button>
-    </li>
-</ol>
-

@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<h4>Nouveau fichier</h4>
 
-</body>
-</html>
+<br />
+
+<div class="form-group">
+    <label for="newFileName">Nom du fichier</label>
+    <input type="text" class="form-control" [(ngModel)]="fileName" id="newFileName" placeholder="Nom du fichier">
+</div>
+
+<button class="btn btn-success" (click)="createNewFile()">Créer le nouveau fichier</button>

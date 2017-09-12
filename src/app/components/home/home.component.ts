@@ -1,12 +1,12 @@
-import {Component} from "@angular/core";
-import {UserService} from "../../service/user.service";
+import {Component, OnInit} from "@angular/core";
+import {UserService} from "../../services/user.service";
 import {Router} from "@angular/router";
 import {User} from "../../model/user";
-import {FileService} from "../../service/file.service";
+import {FileService} from "../../services/file.service";
 import * as fileSaver from "file-saver";
 
-import {MdDialog, MdDialogRef, MD_DIALOG_DATA} from "@angular/material";
-import {DialogNewFileComponent} from "../dialogs/DialogManager";
+import {MdDialog} from "@angular/material";
+import {DialogNewFileComponent, DialogNewFolderComponent, DialogUserInfoComponent} from "../dialogs/DialogManager";
 
 @Component({
     selector: "app-home",
@@ -15,7 +15,7 @@ import {DialogNewFileComponent} from "../dialogs/DialogManager";
     styleUrls: ["./home.component.css"]
 })
 
-export class HomeComponent {
+export class HomeComponent implements OnInit {
     private _currentPath = "";
     private _currentFolder = "";
     private _userData: User = new User();
@@ -23,11 +23,13 @@ export class HomeComponent {
     private _searchList: String[] = [];
     private _search = "";
 
-    constructor(public dialog: MdDialog, private userService: UserService, private fileService: FileService, private router: Router) {
-        if (userService.getUserDataFromSession() == null) {
+    constructor(public dialog: MdDialog, private userService: UserService, private fileService: FileService, private router: Router) {}
+
+    ngOnInit(): void {
+        if (this.userService.getUserDataFromSession() == null) {
             this.router.navigate(["/login"]);
         } else {
-            this._userData = userService.getUserDataFromSession();
+            this._userData = this.userService.getUserDataFromSession();
             this.displayPersonnalFolder();
         }
     }
@@ -35,20 +37,25 @@ export class HomeComponent {
     public displayPersonnalFolder() {
         this.currentPath = "";
         this.currentFolder = this._userData._id.toString();
-        this.displayFolderContents(this.currentFolder);
+        this.displayFolderContents(this.currentFolder, this.currentPath);
     }
 
-    public displayFolderContents(elementName: string) {
-        this.fileService.getContentFromFolder(this._userData._id, elementName, this.currentPath)
+    public displayFolderContents(elementName: string, path: string) {
+        this.fileService.getContentFromFolder(this._userData._id, elementName, path)
             .then(elementList => {
-                this.currentPath = (this.currentPath !== "") ? this.currentPath += "/" + this.currentFolder : "";
                 this.currentFolder = elementName;
+                this.currentPath = path;
                 this.elementList = elementList;
                 this.searchList = elementList;
             })
             .catch(error => {
                 console.log(error);
             });
+    }
+
+    public navigateToFolder(elementName: string) {
+        const path = this.currentPath += "/" + this.currentFolder;
+        this.displayFolderContents(elementName, path);
     }
 
     public filterList() {
@@ -59,22 +66,35 @@ export class HomeComponent {
 
     public getElement(elementName: string) {
         if (elementName[elementName.length - 4] === ".") {
-            this.fileService.downloadFile(this._userData._id, elementName, "/" + this._currentPath)
+            this.fileService.downloadFile(this._userData._id, elementName, this.currentPath + "/" + this.currentFolder)
                 .then(res => fileSaver.saveAs(res, elementName))
                 .catch(error => console.log(error));
         } else {
-            this.displayFolderContents(elementName);
+            this.navigateToFolder(elementName);
         }
     }
 
-    openDialog(): void {
-        let dialogRef = this.dialog.open(DialogNewFileComponent, {
-            width: "250px"
-            //data: { name: this.name, animal: this.animal }
+    openDialogNewFile(): void {
+        const dialogRef = this.dialog.open(DialogNewFileComponent, {
+            width: "33%"
         });
+        dialogRef.componentInstance.currentPath = this.currentPath;
+        dialogRef.componentInstance.currentFolder = this.currentFolder;
+        dialogRef.afterClosed().subscribe(() => this.displayFolderContents(this.currentFolder, this.currentPath));
+    }
 
-        dialogRef.afterClosed().subscribe(result => {
-            console.log("The dialog was closed");
+    openDialogNewFolder(): void {
+        const dialogRef = this.dialog.open(DialogNewFolderComponent, {
+            width: "33%"
+        });
+        dialogRef.componentInstance.currentPath = this.currentPath;
+        dialogRef.componentInstance.currentFolder = this.currentFolder;
+        dialogRef.afterClosed().subscribe(() => this.displayFolderContents(this.currentFolder, this.currentPath));
+    }
+
+    openDialogUserInfo(): void {
+        const dialogRef = this.dialog.open(DialogUserInfoComponent, {
+            width: "33%"
         });
     }
 

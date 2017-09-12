@@ -11,6 +11,9 @@ Codacy (Code Quality)
 Travis CI (Continuous Integration)
 [![Build Status](https://travis-ci.org/ArnaudFlaesch/BlackBox-Web.svg?branch=master)](https://travis-ci.org/ArnaudFlaesch/BlackBox-Web)
 
+Coveralls (Coverage)
+[![Coverage Status](https://coveralls.io/repos/github/ArnaudFlaesch/BlackBox-Services/badge.svg?branch=master)](https://coveralls.io/github/ArnaudFlaesch/BlackBox-Web?branch=master)
+
 Scrutinizer (Code Quality / Continuous Integration)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ArnaudFlaesch/BlackBox-Web/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ArnaudFlaesch/BlackBox-Web/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/ArnaudFlaesch/BlackBox-Web/badges/build.png?b=master)](https://scrutinizer-ci.com/g/ArnaudFlaesch/BlackBox-Web/build-status/master)

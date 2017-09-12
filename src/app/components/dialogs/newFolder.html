@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<h4>Nouveau dossier</h4>
 
-</body>
-</html>
+<br />
+
+<div class="form-group">
+    <label for="newFolderName">Nom du dossier</label>
+    <input type="text" class="form-control" [(ngModel)]="_folderName" id="newFolderName" placeholder="Nom du dossier">
+</div>
+
+<button class="btn btn-success" (click)="createNewFolder()">Créer le nouveau dossier</button>

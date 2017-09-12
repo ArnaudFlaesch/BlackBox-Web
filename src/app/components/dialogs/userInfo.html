@@ -1,10 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<h3>Modifier mes informations personnelles</h3>
 
-</body>
-</html>
+<br />
+
+<div class="form-group">
+    <label for="exampleInputName1">Nom</label>
+    <input type="text" class="form-control" [(ngModel)]="_newUserInfos.name" id="exampleInputName1" placeholder="Nom">
+</div>
+
+<div class="form-group">
+    <label for="exampleInputFirstname1">Prénom</label>
+    <input type="text" class="form-control" [(ngModel)]="_newUserInfos.firstname" id="exampleInputFirstname1" placeholder="Prénom">
+</div>
+
+<div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input type="email" class="form-control" [(ngModel)]="_newUserInfos.email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+    <small id="emailHelp" class="form-text text-muted">Votre email vous servira d'identifiant pour vous connecter au site.</small>
+</div>
+
+<button (click)="sendModifications()" class="btn btn-primary">Valider les modifications</button>
+
+<br />
+
+<h3>Modifier mon mot de passe</h3>
+
+<br />
+
+<div class="form-group">
+    <label for="exampleInputPassword1">Ancien mot de passe</label>
+    <input type="password" class="form-control" [(ngModel)]="oldPassword" id="exampleInputPassword1" placeholder="Ancien mot de passe">
+</div>
+
+<div class="form-group">
+    <label for="exampleInputPassword2">Nouveau mot de passe</label>
+    <input type="password" class="form-control" [(ngModel)]="newPassword" id="exampleInputPassword2" placeholder="Nouveau mot de passe">
+</div>
+
+<button (click)="changePassword()" class="btn btn-primary">Changer le mot de passe</button>
+
+<br />
+
+<h3>Suppression du compte</h3>
+
+<br />
+
+<div class="form-group">
+    <label for="exampleInputPassword3">Mot de passe du compte</label>
+    <input type="password" class="form-control" [(ngModel)]="password" id="exampleInputPassword3" placeholder="Mot de passe">
+</div>
+
+<button (click)="deleteAccount()" class="btn btn-danger">Supprimer mon compte</button>

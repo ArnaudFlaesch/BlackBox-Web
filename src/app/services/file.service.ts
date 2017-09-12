@@ -42,6 +42,20 @@ export class FileService {
             .catch(this.handleError);
     }
 
+    public createNewFile(userId: Number, fileName: string, folderTo: string, currentPath: string) {
+        return this.http.post(this.SERVICES_URL + "/newFile", {userId : userId, elementName : fileName, folderTo: folderTo, path: currentPath}, {headers: this.headers})
+            .toPromise()
+            .then(response => response.json())
+            .catch(this.handleError);
+    }
+
+    public createNewFolder(userId: Number, folderName: string, folderTo: string, currentPath: string) {
+        return this.http.post(this.SERVICES_URL + "/newFolder",  {userId : userId, elementName : folderName, folderTo: folderTo, path: currentPath}, {headers: this.headers})
+            .toPromise()
+            .then(response => response.json())
+            .catch(this.handleError);
+    }
+
 
     private handleError(error: any): Promise<any> {
         console.error("An error occurred", error);

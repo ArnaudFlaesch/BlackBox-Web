@@ -55,22 +55,29 @@ export class UserService {
             .catch(this.handleError);
     }
 
-    delete(id: number): Promise<void> {
-        const url = this.SERVICES_URL + id;
-        return this.http.delete(url, {headers: this.headers})
-          .toPromise()
-          .then(() => null)
-          .catch(this.handleError);
-    }
-
-    update(user: User): Promise<User> {
-        const url = this.SERVICES_URL + user._id;
+    public update(user: User): Promise<User> {
         return this.http
-            .put(url, JSON.stringify(user), {headers: this.headers})
+            .post(this.SERVICES_URL + "/update", user, {headers: this.headers})
             .toPromise()
             .then(() => user)
             .catch(this.handleError);
-      }
+    }
+
+    public updateUserPassword(userId: Number, oldPassword: string, newPassword: string): Promise<User> {
+        return this.http
+            .post(this.SERVICES_URL + "/updateUserPassword", {"userId": userId, "oldPassword": oldPassword, "newPassword": newPassword}, {headers: this.headers})
+            .toPromise()
+            .then(res => res.json())
+            .catch(this.handleError);
+    }
+
+    public deleteAccount(userId: Number, password: string): Promise<User> {
+        return this.http
+            .delete(this.SERVICES_URL + "/delete", {headers: this.headers, params: {"userId": userId, "password": password}})
+            .toPromise()
+            .then(res => res.json())
+            .catch(this.handleError);
+    }
 
     private handleError(error: any): Promise<any> {
         console.error("An error occurred", error);

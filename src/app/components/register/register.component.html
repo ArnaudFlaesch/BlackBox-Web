@@ -3,21 +3,28 @@
 </nav>
 
 <div>
-    <div>
-    <label>Nom: </label>
-    <input [(ngModel)]="this.registeredUser.name">
+    <div style="width: 50%">
+        <div class="form-group">
+            <label for="exampleInputName1">Nom</label>
+            <input type="text" class="form-control" id="exampleInputName1" [(ngModel)]="this.registeredUser.name" placeholder="Nom">
+        </div>
+
+        <div class="form-group">
+            <label for="exampleInputFirstname1">Prénom</label>
+            <input type="text" class="form-control" id="exampleInputFirstname1" [(ngModel)]="this.registeredUser.firstname" placeholder="Prénom">
+        </div>
+
+        <div class="form-group">
+            <label for="exampleInputEmail1">Adresse email</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" [(ngModel)]="this.registeredUser.email" placeholder="Adresse email">
+            <small id="emailHelp" class="form-text text-muted">Votre email vous servira d'identifiant pour vous connecter au site.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="exampleInputPassword1">Mot de passe</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" [(ngModel)]="this.registeredUser.password" type="password" placeholder="Mot de passe">
+        </div>
+
+        <button (click)="registerUser()">Valider la création du compte</button>
     </div>
-    <div>
-    <label>Prénom: </label>
-    <input [(ngModel)]="this.registeredUser.firstname">
-    </div>
-    <div>
-    <label>Adresse mail (login): </label>
-    <input [(ngModel)]="this.registeredUser.email">
-    </div>
-    <div>
-    <label>Mot de passe: </label>
-    <input [(ngModel)]="this.registeredUser.password" type="password">
-    </div>
-    <button (click)="registerUser()">Valider la création du compte</button>
 </div>

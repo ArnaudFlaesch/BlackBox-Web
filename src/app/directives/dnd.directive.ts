@@ -1,5 +1,5 @@
 import {Directive, HostBinding, HostListener } from "@angular/core";
-import {FileService} from "../service/file.service";
+import {FileService} from "../services/file.service";
 import {HomeComponent} from "../components/home/home.component";
 
 @Directive({
@@ -27,6 +27,6 @@ export class DndDirective {
         evt.stopPropagation();
         this.background = "#eee";
         this.fileService.uploadFiles(evt.dataTransfer.files, this.homeComponent.currentFolder, this.homeComponent.userData._id);
-        this.homeComponent.displayFolderContents(this.homeComponent.currentFolder);
+        this.homeComponent.displayFolderContents(this.homeComponent.currentFolder, this.homeComponent.currentPath);
     }
 }
