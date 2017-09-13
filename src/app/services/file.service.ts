@@ -21,6 +21,14 @@ export class FileService {
             .catch(this.handleError);
     }
 
+    public getSharedFolders(userId: Number) {
+        return this.http
+            .get(this.SERVICES_URL + "/sharedFolders", {headers: this.headers, params: {userId : userId }})
+            .toPromise()
+            .then(folderList => folderList.json())
+            .catch(this.handleError);
+    }
+
     public uploadFiles(files: File[], path, userId: Number) {
         if (files.length > 0) {
             for (let i = 0; i < files.length; i++) {

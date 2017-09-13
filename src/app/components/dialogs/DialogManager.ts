@@ -1,4 +1,4 @@
-import {Component, Inject} from "@angular/core";
+import {AfterViewChecked, ChangeDetectorRef, Component, Inject} from "@angular/core";
 import {MD_DIALOG_DATA, MdDialogRef} from "@angular/material";
 import {User} from "../../model/user";
 import {UserService} from "../../services/user.service";
@@ -9,16 +9,20 @@ import {Router} from "@angular/router";
     selector: "newFile",
     templateUrl: "newFile.html",
 })
-export class DialogNewFileComponent {
+export class DialogNewFileComponent  implements AfterViewChecked {
 
     private _fileName = "";
     private _currentPath = "";
     private _currentFolder = "";
     public fileNamePattern = /[^\\]*\.[a-zA-Z]{3}$/;
 
-    constructor(public dialogRef: MdDialogRef<DialogNewFileComponent>,
+    constructor(private cdRef: ChangeDetectorRef, public dialogRef: MdDialogRef<DialogNewFileComponent>,
                 @Inject(MD_DIALOG_DATA) public data: any,
                 private fileService: FileService, private userService: UserService) {
+    }
+
+    ngAfterViewChecked() {
+        this.cdRef.detectChanges();
     }
 
     onNoClick(): void {
@@ -60,15 +64,19 @@ export class DialogNewFileComponent {
     selector: "newFolder",
     templateUrl: "newFolder.html",
 })
-export class DialogNewFolderComponent {
+export class DialogNewFolderComponent implements AfterViewChecked {
 
     private _folderName = "";
     private _currentPath = "";
     private _currentFolder = "";
 
-    constructor(public dialogRef: MdDialogRef<DialogNewFileComponent>,
+    constructor(private cdRef: ChangeDetectorRef, public dialogRef: MdDialogRef<DialogNewFileComponent>,
                 @Inject(MD_DIALOG_DATA) public data: any,
                 private fileService: FileService, private userService: UserService) {
+    }
+
+    ngAfterViewChecked() {
+        this.cdRef.detectChanges();
     }
 
     onNoClick(): void {
@@ -110,15 +118,19 @@ export class DialogNewFolderComponent {
     selector: "userInfo",
     templateUrl: "userInfo.html",
 })
-export class DialogUserInfoComponent {
+export class DialogUserInfoComponent implements AfterViewChecked {
 
     private _newUserInfos: User = new User();
     private _oldPassword =  "";
     private _newPassword =  "";
     private _password =  "";
 
-    constructor(public dialogRef: MdDialogRef<DialogUserInfoComponent>, private router: Router,
+    constructor(private cdRef: ChangeDetectorRef, public dialogRef: MdDialogRef<DialogUserInfoComponent>, private router: Router,
                 @Inject(MD_DIALOG_DATA) public data: any, private userService: UserService) { }
+
+    ngAfterViewChecked() {
+        this.cdRef.detectChanges();
+    }
 
     onNoClick(): void {
         this.dialogRef.close();

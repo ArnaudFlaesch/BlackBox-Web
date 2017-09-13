@@ -45,6 +45,18 @@ export class HomeComponent implements OnInit {
         this.displayFolderContents(this.currentFolder, this.currentPath);
     }
 
+    public displaySharedFolders() {
+        this.pageTitle = "Dossiers partagés";
+        this.currentFolder = "";
+        this.currentPath = "";
+        this.fileService.getSharedFolders(this._userData._id)
+            .then(elementList => {
+                this.elementList = elementList;
+                this.searchList = elementList;
+            })
+            .catch(error => console.log(error));
+    }
+
     public displayFolderContents(elementName: string, path: string) {
         this.fileService.getContentFromFolder(this._userData._id, elementName, path)
             .then(elementList => {
@@ -60,7 +72,7 @@ export class HomeComponent implements OnInit {
     }
 
     public navigateToFolder(elementName: string) {
-        const path = this.currentPath += "/" + this.currentFolder;
+        const path = (this.currentPath === "" && this.currentFolder === "") ? "" : this.currentPath += "/" + this.currentFolder;
         this.displayFolderContents(elementName, path);
     }
 
@@ -110,7 +122,13 @@ export class HomeComponent implements OnInit {
         });
         dialogRef.componentInstance.currentPath = this.currentPath;
         dialogRef.componentInstance.currentFolder = this.currentFolder;
-        dialogRef.afterClosed().subscribe(() => this.displayFolderContents(this.currentFolder, this.currentPath));
+        dialogRef.afterClosed().subscribe(() => {
+            if (this.currentFolder === "" && this.currentPath === "") {
+                this.displaySharedFolders();
+            } else {
+                this.displayFolderContents(this.currentFolder, this.currentPath);
+            }
+        });
     }
 
     openDialogNewFolder(): void {
@@ -119,7 +137,13 @@ export class HomeComponent implements OnInit {
         });
         dialogRef.componentInstance.currentPath = this.currentPath;
         dialogRef.componentInstance.currentFolder = this.currentFolder;
-        dialogRef.afterClosed().subscribe(() => this.displayFolderContents(this.currentFolder, this.currentPath));
+        dialogRef.afterClosed().subscribe(() => {
+            if (this.currentFolder === "" && this.currentPath === "") {
+                this.displaySharedFolders();
+            } else {
+                this.displayFolderContents(this.currentFolder, this.currentPath);
+            }
+        });
     }
 
     openDialogUserInfo(): void {

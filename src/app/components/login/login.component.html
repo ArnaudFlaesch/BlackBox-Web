@@ -1,9 +1,9 @@
 <div style="margin-top: 2%; margin-left: 30%; width: 35%;">
     <div style="color: red">
-        <div [hidden]="!email.errors">
+        <div *ngIf="email.errors && (email.dirty || email.touched)">
             L'email n'est pas valide.
         </div>
-        <div [hidden]="!password.errors">
+        <div *ngIf="password.errors && (password.dirty || password.touched)">
             Le mot de passe doit faire entre 8 et 20 caractères.
         </div>
         <br />

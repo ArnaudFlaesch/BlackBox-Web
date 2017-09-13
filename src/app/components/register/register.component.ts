@@ -8,7 +8,7 @@ import {Router} from "@angular/router";
   templateUrl: "./register.component.html",
   styleUrls: ["./register.component.css"]
 })
-export class RegisterComponent implements AfterViewChecked{
+export class RegisterComponent implements AfterViewChecked {
 
     private _registeredUser: User;
     public emailPattern = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;

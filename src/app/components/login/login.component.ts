@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import {AfterViewChecked, ChangeDetectorRef, Component} from "@angular/core";
 
 import { User } from "../../model/user";
 import { UserService } from "../../services/user.service";
@@ -10,13 +10,17 @@ import {Router} from "@angular/router";
   styleUrls: [ "./login.component.css" ],
   providers: [UserService]
 })
-export class LoginComponent  {
+export class LoginComponent implements AfterViewChecked {
 
     private _credentials: User;
     public emailPattern = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
 
-    constructor(private userService: UserService, private router: Router) {
+    constructor(private cdRef: ChangeDetectorRef, private userService: UserService, private router: Router) {
         this._credentials = new User;
+    }
+
+    ngAfterViewChecked() {
+        this.cdRef.detectChanges();
     }
 
     public logUser() {
