@@ -1,52 +1,70 @@
 <h3>Modifier mes informations personnelles</h3>
 
-<br />
+<div style="color: red">
+    <div *ngIf="name.errors || firstname.errors">
+        Ce champs est obligatoire.
+    </div>
+    <div [hidden]="!email.errors">
+        L'email n'est pas valide.
+    </div>
+    <br />
+</div>
 
 <div class="form-group">
     <label for="exampleInputName1">Nom</label>
-    <input type="text" class="form-control" [(ngModel)]="_newUserInfos.name" id="exampleInputName1" placeholder="Nom">
+    <input type="text" class="form-control" required maxlength="255" name="name" #name="ngModel" [(ngModel)]="_newUserInfos.name" id="exampleInputName1" placeholder="Nom">
 </div>
 
 <div class="form-group">
     <label for="exampleInputFirstname1">Prénom</label>
-    <input type="text" class="form-control" [(ngModel)]="_newUserInfos.firstname" id="exampleInputFirstname1" placeholder="Prénom">
+    <input type="text" class="form-control" required maxlength="255" name="firstname" #firstname="ngModel" [(ngModel)]="_newUserInfos.firstname" id="exampleInputFirstname1" placeholder="Prénom">
 </div>
 
 <div class="form-group">
     <label for="exampleInputEmail1">Email address</label>
-    <input type="email" class="form-control" [(ngModel)]="_newUserInfos.email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+    <input type="email" class="form-control" required maxlength="255" name="email" #email="ngModel" [pattern]="this.emailPattern" [(ngModel)]="_newUserInfos.email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
     <small id="emailHelp" class="form-text text-muted">Votre email vous servira d'identifiant pour vous connecter au site.</small>
 </div>
 
-<button (click)="sendModifications()" class="btn btn-primary">Valider les modifications</button>
+<button (click)="sendModifications()" [disabled]="name.errors || firstname.errors || email.errors" class="btn btn-primary">Valider les modifications</button>
 
 <br />
 
 <h3>Modifier mon mot de passe</h3>
 
-<br />
+<div style="color: red">
+    <div *ngIf="newpassword.errors || oldpassword.errors">
+        Le mot de passe doit faire entre 8 et 20 caractères.
+    </div>
+    <br />
+</div>
 
 <div class="form-group">
     <label for="exampleInputPassword1">Ancien mot de passe</label>
-    <input type="password" class="form-control" [(ngModel)]="oldPassword" id="exampleInputPassword1" placeholder="Ancien mot de passe">
+    <input type="password" class="form-control" required minlength="8" maxlength="20" name="oldpassword" #oldpassword="ngModel" [(ngModel)]="oldPassword" id="exampleInputPassword1" placeholder="Ancien mot de passe">
 </div>
 
 <div class="form-group">
     <label for="exampleInputPassword2">Nouveau mot de passe</label>
-    <input type="password" class="form-control" [(ngModel)]="newPassword" id="exampleInputPassword2" placeholder="Nouveau mot de passe">
+    <input type="password" class="form-control" required minlength="8" maxlength="20" name="newpassword" #newpassword="ngModel" [(ngModel)]="newPassword" id="exampleInputPassword2" placeholder="Nouveau mot de passe">
 </div>
 
-<button (click)="changePassword()" class="btn btn-primary">Changer le mot de passe</button>
+<button (click)="changePassword()" [disabled]="oldpassword.errors || newpassword.errors" class="btn btn-primary">Changer le mot de passe</button>
 
 <br />
 
 <h3>Suppression du compte</h3>
 
-<br />
+<div style="color: red">
+    <div [hidden]="!controlpassword.errors">
+        Le mot de passe doit faire entre 8 et 20 caractères.
+    </div>
+    <br />
+</div>
 
 <div class="form-group">
     <label for="exampleInputPassword3">Mot de passe du compte</label>
-    <input type="password" class="form-control" [(ngModel)]="password" id="exampleInputPassword3" placeholder="Mot de passe">
+    <input type="password" class="form-control" required minlength="8" maxlength="20" name="controlpassword" #controlpassword="ngModel" [(ngModel)]="password" id="exampleInputPassword3" placeholder="Mot de passe">
 </div>
 
-<button (click)="deleteAccount()" class="btn btn-danger">Supprimer mon compte</button>
+<button (click)="deleteAccount()" [disabled]="controlpassword.errors" class="btn btn-danger">Supprimer mon compte</button>

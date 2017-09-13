@@ -25,14 +25,14 @@
                     </span>
                 </div>
                 <div class="col-md-3">
-                    <span class="form-inline" style="position: absolute; left: -3em">
-                        <input class="form-control" type="text" (keyup)="filterList()" [(ngModel)]="search" placeholder="Rechercher un fichier ou un dossier" aria-label="Search" style="width:250%">
+                    <span>
+                        <input class="form-control" type="text" (keyup)="filterList()" [(ngModel)]="search" placeholder="Rechercher un fichier ou un dossier" aria-label="Search">
                     </span>
                 </div>
             </div>
 
             <div class="dropzone" appHome>
-                <span class="img-with-text" *ngFor="let element of _searchList" (dblclick)="getElement(element)"  style="margin : 0.5em">
+                <span class="img-with-text" *ngFor="let element of _searchList" (dblclick)="getElement(element)" style="margin : 0.5em">
                     <img [src]="'../assets/' + getIcon(element) + '_icon.png'" />
                     <span>{{ element }}</span>
                 </span>

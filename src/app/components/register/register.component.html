@@ -1,30 +1,40 @@
-<nav>
-  <a routerLink="/login" routerLinkActive="active">Se connecter</a>
-</nav>
-
 <div>
-    <div style="width: 50%">
+    <div style="margin-top: 2%; margin-left: 30%; width: 35%">
+        <div style="color: red">
+            <div *ngIf="name.errors || firstname.errors">
+                Ce champs est obligatoire.
+            </div>
+            <div [hidden]="!email.errors">
+                L'email n'est pas valide.
+            </div>
+            <div [hidden]="!password.errors">
+                Le mot de passe doit faire entre 8 et 20 caractères.
+            </div>
+            <br />
+        </div>
+
         <div class="form-group">
             <label for="exampleInputName1">Nom</label>
-            <input type="text" class="form-control" id="exampleInputName1" [(ngModel)]="this.registeredUser.name" placeholder="Nom">
+            <input type="text" class="form-control" required maxlength="255" id="exampleInputName1" name="name" #name="ngModel" [(ngModel)]="this.registeredUser.name" placeholder="Nom">
         </div>
 
         <div class="form-group">
             <label for="exampleInputFirstname1">Prénom</label>
-            <input type="text" class="form-control" id="exampleInputFirstname1" [(ngModel)]="this.registeredUser.firstname" placeholder="Prénom">
+            <input type="text" class="form-control" required maxlength="255" id="exampleInputFirstname1" name="firstname" #firstname="ngModel" [(ngModel)]="this.registeredUser.firstname" placeholder="Prénom">
         </div>
 
         <div class="form-group">
             <label for="exampleInputEmail1">Adresse email</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" [(ngModel)]="this.registeredUser.email" placeholder="Adresse email">
+            <input type="email" class="form-control" required maxlength="255" id="exampleInputEmail1" name="email" #email="ngModel" [pattern]="this.emailPattern" aria-describedby="emailHelp" [(ngModel)]="this.registeredUser.email" placeholder="Adresse email">
             <small id="emailHelp" class="form-text text-muted">Votre email vous servira d'identifiant pour vous connecter au site.</small>
         </div>
 
         <div class="form-group">
             <label for="exampleInputPassword1">Mot de passe</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" [(ngModel)]="this.registeredUser.password" type="password" placeholder="Mot de passe">
+            <input type="password" class="form-control" required minlength="8" maxlength="20" id="exampleInputPassword1" name="password" #password="ngModel" [(ngModel)]="this.registeredUser.password" type="password" placeholder="Mot de passe">
         </div>
 
-        <button (click)="registerUser()">Valider la création du compte</button>
+        <button class="btn btn-success" [disabled]="name.errors || firstname.errors || email.errors || password.errors" (click)="registerUser()">Valider la création du compte</button>
+        <button class="btn btn-primary" routerLink="/login" routerLinkActive="active">Se connecter</button>
     </div>
 </div>

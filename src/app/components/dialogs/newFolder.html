@@ -1,10 +1,15 @@
 <h4>Nouveau dossier</h4>
 
-<br />
+<div style="color: red">
+    <div [hidden]="!name.errors">
+        Le nom du dossier est obligatoire.
+    </div>
+    <br />
+</div>
 
 <div class="form-group">
     <label for="newFolderName">Nom du dossier</label>
-    <input type="text" class="form-control" [(ngModel)]="_folderName" id="newFolderName" placeholder="Nom du dossier">
+    <input type="text" class="form-control" name="name" required maxlength="255" #name="ngModel" [(ngModel)]="_folderName" id="newFolderName" placeholder="Nom du dossier">
 </div>
 
-<button class="btn btn-success" (click)="createNewFolder()">Créer le nouveau dossier</button>
+<button class="btn btn-success" [disabled]="name.errors" (click)="createNewFolder()">Créer le nouveau dossier</button>

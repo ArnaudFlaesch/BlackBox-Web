@@ -25,6 +25,7 @@ export class HomeComponent implements OnInit {
     private _searchList: String[] = [];
     private _search = "";
     private navigationBar: NavElement[] = [];
+    public emailPattern = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
 
     constructor(public dialog: MdDialog, private userService: UserService, private fileService: FileService, private router: Router) {}
 
@@ -123,7 +124,7 @@ export class HomeComponent implements OnInit {
 
     openDialogUserInfo(): void {
         const dialogRef = this.dialog.open(DialogUserInfoComponent, {
-            width: "33%"
+            width: "40%"
         });
     }
 

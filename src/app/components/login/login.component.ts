@@ -12,19 +12,28 @@ import {Router} from "@angular/router";
 })
 export class LoginComponent  {
 
-  credentials: User;
+    private _credentials: User;
+    public emailPattern = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
 
-  constructor(private userService: UserService, private router: Router) {
-      this.credentials = new User;
-  }
+    constructor(private userService: UserService, private router: Router) {
+        this._credentials = new User;
+    }
 
-  public logUser() {
-      this.userService.login(this.credentials)
-          .then(() => {
-              this.router.navigate(["/home"]);
-          })
-          .catch(error => {
-              console.log(error);
-          });
-  }
+    public logUser() {
+        this.userService.login(this._credentials)
+            .then(() => {
+                this.router.navigate(["/home"]);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+    get credentials(): User {
+        return this._credentials;
+    }
+
+    set credentials(value: User) {
+        this._credentials = value;
+    }
 }
