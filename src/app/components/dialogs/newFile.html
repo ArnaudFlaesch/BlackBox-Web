@@ -2,14 +2,14 @@
 
 <div style="color: red">
     <div [hidden]="!name.errors">
-        Le nom du fichier est obligatoire.
+        Le nom du fichier est obligatoire et doit comporter son extension (.txt, .doc, etc...).
     </div>
     <br />
 </div>
 
 <div class="form-group">
     <label for="newFileName">Nom du fichier</label>
-    <input type="text" class="form-control" name="name" required maxlength="255" #name="ngModel" [(ngModel)]="fileName" id="newFileName" placeholder="Nom du fichier">
+    <input type="text" class="form-control" name="name" required maxlength="255" #name="ngModel" [pattern]="this.fileNamePattern" [(ngModel)]="fileName" id="newFileName" placeholder="Nom du fichier">
 </div>
 
 <button class="btn btn-success" [disabled]="name.errors" (click)="createNewFile()">Créer le nouveau fichier</button>

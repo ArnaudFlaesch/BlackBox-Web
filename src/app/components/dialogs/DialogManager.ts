@@ -14,6 +14,7 @@ export class DialogNewFileComponent {
     private _fileName = "";
     private _currentPath = "";
     private _currentFolder = "";
+    public fileNamePattern = /[^\\]*\.[a-zA-Z]{3}$/;
 
     constructor(public dialogRef: MdDialogRef<DialogNewFileComponent>,
                 @Inject(MD_DIALOG_DATA) public data: any,

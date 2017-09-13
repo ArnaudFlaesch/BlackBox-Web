@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import {AfterViewChecked, ChangeDetectorRef, Component} from "@angular/core";
 import {User} from "../../model/user";
 import {UserService} from "../../services/user.service";
 import {Router} from "@angular/router";
@@ -8,15 +8,17 @@ import {Router} from "@angular/router";
   templateUrl: "./register.component.html",
   styleUrls: ["./register.component.css"]
 })
-export class RegisterComponent {
+export class RegisterComponent implements AfterViewChecked{
 
-    registeredUser: User;
-    private userService: UserService;
+    private _registeredUser: User;
     public emailPattern = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
 
-    constructor(private _userService: UserService, private router: Router) {
-        this.userService = _userService;
+    constructor(private cdRef: ChangeDetectorRef, private userService: UserService, private router: Router) {
         this.registeredUser = new User();
+    }
+
+    ngAfterViewChecked() {
+        this.cdRef.detectChanges();
     }
 
     public registerUser() {
@@ -33,5 +35,13 @@ export class RegisterComponent {
             .catch(error => {
                 console.log(error);
             });
+    }
+
+    get registeredUser(): User {
+        return this._registeredUser;
+    }
+
+    set registeredUser(value: User) {
+        this._registeredUser = value;
     }
 }
