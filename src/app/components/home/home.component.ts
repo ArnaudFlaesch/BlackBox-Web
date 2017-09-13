@@ -7,6 +7,7 @@ import * as fileSaver from "file-saver";
 
 import {MdDialog} from "@angular/material";
 import {DialogNewFileComponent, DialogNewFolderComponent, DialogUserInfoComponent} from "../dialogs/DialogManager";
+import {NavElement} from "../../model/navElement";
 
 @Component({
     selector: "app-home",
@@ -16,12 +17,14 @@ import {DialogNewFileComponent, DialogNewFolderComponent, DialogUserInfoComponen
 })
 
 export class HomeComponent implements OnInit {
+    private pageTitle = "";
     private _currentPath = "";
     private _currentFolder = "";
     private _userData: User = new User();
     private _elementList: String[] = [];
     private _searchList: String[] = [];
     private _search = "";
+    private navigationBar: NavElement[] = [];
 
     constructor(public dialog: MdDialog, private userService: UserService, private fileService: FileService, private router: Router) {}
 
@@ -35,6 +38,7 @@ export class HomeComponent implements OnInit {
     }
 
     public displayPersonnalFolder() {
+        this.pageTitle = "Dossier personnel";
         this.currentPath = "";
         this.currentFolder = this._userData._id.toString();
         this.displayFolderContents(this.currentFolder, this.currentPath);
@@ -47,6 +51,7 @@ export class HomeComponent implements OnInit {
                 this.currentPath = path;
                 this.elementList = elementList;
                 this.searchList = elementList;
+                this.createNavigationTab();
             })
             .catch(error => {
                 console.log(error);
@@ -56,6 +61,22 @@ export class HomeComponent implements OnInit {
     public navigateToFolder(elementName: string) {
         const path = this.currentPath += "/" + this.currentFolder;
         this.displayFolderContents(elementName, path);
+    }
+
+    public createNavigationTab() {
+        this.navigationBar = [];
+        if (this.currentPath !== "") {
+            let folders = (this.currentPath + "/" + this.currentFolder).split("/").filter(Boolean);
+            for (let ind = 0; ind < folders.length; ind++) {
+                this.navigationBar.push(new NavElement(folders[ind]));
+            }
+            this.navigationBar[0].title = "Mon dossier";
+            this.navigationBar[0].path = "";
+            for (let ind = 1; ind < folders.length; ind++) {
+                this.navigationBar[ind].path = (this.navigationBar[ind - 1].path !== "" ?  "/" + this.navigationBar[ind - 1].path +  "/" + folders[ind] : "/" + folders[ind - 1]);
+                this.navigationBar[ind].title = this.navigationBar[ind].folder;
+            }
+        }
     }
 
     public filterList() {
@@ -71,6 +92,14 @@ export class HomeComponent implements OnInit {
                 .catch(error => console.log(error));
         } else {
             this.navigateToFolder(elementName);
+        }
+    }
+
+    public getBreadCrumbClasses(elementName: string) {
+        if (elementName === this.currentFolder) {
+            return("breadcrumb-item active success");
+        } else {
+            return("breadcrumb-item");
         }
     }
 
@@ -96,10 +125,6 @@ export class HomeComponent implements OnInit {
         const dialogRef = this.dialog.open(DialogUserInfoComponent, {
             width: "33%"
         });
-    }
-
-    public newFolder() {
-
     }
 
     public getIcon(elementName: String): String {

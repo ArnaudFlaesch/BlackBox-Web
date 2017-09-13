@@ -11,11 +11,11 @@
             </div>
         </div>
         <div class="col-md-10">
+            <h3>{{ pageTitle }}</h3>
             <div class="row">
                 <div class="col-md-6">
-                    <ol class="breadcrumb">
-                        <li *ngFor="let folder of navPath" class="breadcrumb-item"><a href="#">{{ folder }}</a></li>
-
+                    <ol [hidden]="currentPath === '' " class="breadcrumb">
+                        <li *ngFor="let navElement of navigationBar" (click)="displayFolderContents(navElement.folder, navElement.path)" [ngClass]="getBreadCrumbClasses(navElement.folder)">{{ navElement.title }}</li>
                     </ol>
                 </div>
                 <div class="col-md-3">
