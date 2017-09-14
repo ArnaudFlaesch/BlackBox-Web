@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit, ViewChild} from "@angular/core";
 import {UserService} from "../../services/user.service";
 import {Router} from "@angular/router";
 import {User} from "../../model/user";
@@ -10,6 +10,8 @@ import {NavElement} from "../../model/navElement";
 import {DialogNewFileComponent} from "../dialogs/DialogNewFileComponent";
 import {DialogNewFolderComponent} from "../dialogs/DialogNewFolderComponent";
 import {DialogUserInfoComponent} from "../dialogs/DialogUserInfoComponent";
+import {DialogStockageComponent} from "../dialogs/DialogStockageComponent";
+import {ContextMenuComponent} from "ngx-contextmenu";
 
 @Component({
     selector: "app-home",
@@ -29,6 +31,8 @@ export class HomeComponent implements OnInit {
     private navigationBar: NavElement[] = [];
     private canShareElements: Boolean = false;
     public emailPattern = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+
+    @ViewChild(ContextMenuComponent) public basicMenu: ContextMenuComponent;
 
     constructor(public dialog: MdDialog, private userService: UserService, private fileService: FileService, private router: Router) {}
 
@@ -127,13 +131,21 @@ export class HomeComponent implements OnInit {
     }
 
     public getElement(elementName: string) {
-        if (elementName[elementName.length - 4] === ".") {
+        if (this.isFile(elementName)) {
             const path = (this.currentPath === "" && this.currentFolder === "") ? "" : this.currentPath + "/" + this.currentFolder;
             this.fileService.downloadFile(this._userData._id, elementName, path)
                 .then(res => fileSaver.saveAs(res, elementName))
                 .catch(error => console.log(error));
         } else {
             this.navigateToFolder(elementName);
+        }
+    }
+
+    public isFile(elementName: string) {
+        if (elementName[elementName.length - 4] === ".") {
+            return(false);
+        } else {
+            return(true);
         }
     }
 
@@ -177,6 +189,20 @@ export class HomeComponent implements OnInit {
 
     openDialogUserInfo(): void {
         const dialogRef = this.dialog.open(DialogUserInfoComponent, {
+            width: "40%"
+        });
+    }
+
+    openDialogStockage(): void {
+        const dialogRef = this.dialog.open(DialogStockageComponent, {
+            width: "40%"
+        });
+        dialogRef.componentInstance.isPremiumUser = this.userData.isPremiumUser;
+        dialogRef.componentInstance.premiumDateOfExpiration = this.userData.premiumDateOfExpiration;
+    }
+
+    openDialogShare(): void {
+        const dialogRef = this.dialog.open(DialogStockageComponent, {
             width: "40%"
         });
     }

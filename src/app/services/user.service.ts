@@ -47,14 +47,6 @@ export class UserService {
             .catch(this.handleError);
     }
 
-    public getUser(id: number): Promise<User> {
-        const url = this.SERVICES_URL + "/info/" + id;
-        return this.http.get(url)
-            .toPromise()
-            .then(response => response.json() as User)
-            .catch(this.handleError);
-    }
-
     public update(user: User): Promise<User> {
         return this.http
             .post(this.SERVICES_URL + "/update", user, {headers: this.headers})

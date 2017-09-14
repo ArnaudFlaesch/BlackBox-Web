@@ -1,0 +1,21 @@
+<h4>Gestion de l'espace de stockage</h4>
+
+<br />
+
+<div>
+    <h5>Espace personnel</h5>
+    <p>Vous utilisez 50% de votre espace de stockage personnel (500Mo / 1Go)</p>
+
+    <br />
+
+    <h5>Espace partagé</h5>
+    <p>Vous utilisez 50% de votre espace de stockage partagé (500Mo / 1Go)</p>
+
+    <div *ngIf="!isPremiumUser">
+        <a href="http://localhost:3000/user/premium"><button class="btn btn-success">Passez au Premium pour 0.01€ seulement !</button></a>
+    </div>
+    <div *ngIf="isPremiumUser">
+        <p>Votre compte Premium expire le : {{ this.premiumDateOfExpiration | date: 'dd/MM/yyyy' }}</p>
+    </div>
+</div>
+

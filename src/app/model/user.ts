@@ -4,6 +4,8 @@ export class User {
   firstname: string;
   email: string;
   password: string;
+  isPremiumUser: Boolean;
+  premiumDateOfExpiration: Date;
 
   public User() {}
 }

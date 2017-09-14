@@ -16,6 +16,11 @@ import {NoopAnimationsModule} from "@angular/platform-browser/animations";
 import {DialogNewFileComponent} from "./components/dialogs/DialogNewFileComponent";
 import {DialogNewFolderComponent} from "./components/dialogs/DialogNewFolderComponent";
 import {DialogUserInfoComponent} from "./components/dialogs/DialogUserInfoComponent";
+import {DialogStockageComponent} from "./components/dialogs/DialogStockageComponent";
+import {ContextMenuModule} from "ngx-contextmenu";
+import {DialogShareComponent} from "./components/dialogs/DialogShareComponent";
+import {DialogRenameComponent} from "./components/dialogs/DialogRenameComponent";
+import {DialogMoveComponent} from "./components/dialogs/DialogMoveComponent";
 
 @NgModule({
     declarations: [
@@ -24,20 +29,26 @@ import {DialogUserInfoComponent} from "./components/dialogs/DialogUserInfoCompon
         RegisterComponent,
         HomeComponent,
         DndDirective,
+        DialogMoveComponent,
         DialogNewFileComponent,
         DialogNewFolderComponent,
+        DialogRenameComponent,
+        DialogShareComponent,
+        DialogStockageComponent,
         DialogUserInfoComponent
   ],
   imports: [
       AppRoutingModule,
       BrowserModule,
+      ContextMenuModule,
       FormsModule,
       HttpModule,
       MdDialogModule,
       MdFormFieldModule,
       NoopAnimationsModule
   ],
-    entryComponents: [DialogNewFileComponent, DialogNewFolderComponent, DialogUserInfoComponent],
+    entryComponents: [DialogMoveComponent, DialogNewFileComponent, DialogNewFolderComponent,
+        DialogRenameComponent, DialogShareComponent, DialogUserInfoComponent, DialogStockageComponent],
     providers: [UserService, FileService],
     bootstrap: [BlackBoxComponent]
 })

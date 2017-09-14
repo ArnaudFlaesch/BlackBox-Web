@@ -6,7 +6,8 @@
             <div class="list-group" id="list-tab" role="tablist">
                 <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" (click)="displayPersonnalFolder()">Dossier personnel</a>
                 <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" (click)="displaySharedFolders()">Dossiers / Fichiers partagés</a>
-                <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" (click)="openDialogUserInfo()">Gérer son compte</a>
+                <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" (click)="openDialogUserInfo()">Gérer mon compte</a>
+                <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" (click)="openDialogStockage()">Gérer mon espace de stockage</a>
                 <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" (click)="logout()" aria-controls="settings">Déconnexion</a>
             </div>
         </div>
@@ -20,8 +21,8 @@
                 </div>
                 <div class="col-md-3">
                     <span>
-                        <button type="button" (click)="openDialogNewFile()" class="btn btn-secondary">Nouveau fichier</button>
-                        <button type="button" (click)="openDialogNewFolder()" class="btn btn-secondary">Nouveau dossier</button>
+                        <button type="button" (click)="openDialogNewFile()" class="btn btn-primary">Nouveau fichier</button>
+                        <button type="button" (click)="openDialogNewFolder()" class="btn btn-primary">Nouveau dossier</button>
                     </span>
                 </div>
                 <div class="col-md-3">
@@ -32,10 +33,18 @@
             </div>
 
             <div class="dropzone" appHome>
-                <span class="img-with-text" *ngFor="let element of _searchList" (dblclick)="getElement(element)" style="margin : 0.5em">
+                <span class="img-with-text" *ngFor="let element of _searchList" [contextMenu]="basicMenu" [contextMenuSubject]="element" (dblclick)="getElement(element)" style="margin : 0.5em">
                     <img [src]="'../assets/' + getIcon(element) + '_icon.png'" />
                     <span>{{ element }}</span>
                 </span>
+                <context-menu>
+                    <ng-template *ngIf="canShareElements" contextMenuItem (execute)="openDialogShare()">
+                        Partager
+                    </ng-template>
+                    <ng-template contextMenuItem passive="true">
+                        Input something: <input type="text">
+                    </ng-template>
+                </context-menu>
             </div>
         </div>
     </div>
