@@ -14,7 +14,7 @@
             <h3>{{ pageTitle }}</h3>
             <div class="row">
                 <div class="col-md-6">
-                    <ol [hidden]="currentPath === '' " class="breadcrumb">
+                    <ol [hidden]="navigationBar.length === 0" class="breadcrumb">
                         <li *ngFor="let navElement of navigationBar" (click)="displayFolderContents(navElement.folder, navElement.path)" [ngClass]="getBreadCrumbClasses(navElement.folder)">{{ navElement.title }}</li>
                     </ol>
                 </div>

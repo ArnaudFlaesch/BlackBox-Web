@@ -6,8 +6,10 @@ import {FileService} from "../../services/file.service";
 import * as fileSaver from "file-saver";
 
 import {MdDialog} from "@angular/material";
-import {DialogNewFileComponent, DialogNewFolderComponent, DialogUserInfoComponent} from "../dialogs/DialogManager";
 import {NavElement} from "../../model/navElement";
+import {DialogNewFileComponent} from "../dialogs/DialogNewFileComponent";
+import {DialogNewFolderComponent} from "../dialogs/DialogNewFolderComponent";
+import {DialogUserInfoComponent} from "../dialogs/DialogUserInfoComponent";
 
 @Component({
     selector: "app-home",
@@ -25,6 +27,7 @@ export class HomeComponent implements OnInit {
     private _searchList: String[] = [];
     private _search = "";
     private navigationBar: NavElement[] = [];
+    private canShareElements: Boolean = false;
     public emailPattern = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
 
     constructor(public dialog: MdDialog, private userService: UserService, private fileService: FileService, private router: Router) {}
@@ -40,6 +43,7 @@ export class HomeComponent implements OnInit {
 
     public displayPersonnalFolder() {
         this.pageTitle = "Dossier personnel";
+        this.canShareElements = false;
         this.currentPath = "";
         this.currentFolder = this._userData._id.toString();
         this.displayFolderContents(this.currentFolder, this.currentPath);
@@ -47,12 +51,14 @@ export class HomeComponent implements OnInit {
 
     public displaySharedFolders() {
         this.pageTitle = "Dossiers partagés";
+        this.canShareElements = true;
         this.currentFolder = "";
         this.currentPath = "";
         this.fileService.getSharedFolders(this._userData._id)
             .then(elementList => {
                 this.elementList = elementList;
                 this.searchList = elementList;
+                this.createSharedNavigationTab();
             })
             .catch(error => console.log(error));
     }
@@ -64,7 +70,7 @@ export class HomeComponent implements OnInit {
                 this.currentPath = path;
                 this.elementList = elementList;
                 this.searchList = elementList;
-                this.createNavigationTab();
+                (this.canShareElements) ? this.createSharedNavigationTab() : this.createNavigationTab();
             })
             .catch(error => {
                 console.log(error);
@@ -89,6 +95,28 @@ export class HomeComponent implements OnInit {
                 this.navigationBar[ind].path = (this.navigationBar[ind - 1].path !== "" ?  "/" + this.navigationBar[ind - 1].path +  "/" + folders[ind] : "/" + folders[ind - 1]);
                 this.navigationBar[ind].title = this.navigationBar[ind].folder;
             }
+        } else {
+            this.navigationBar.push(new NavElement(""));
+            this.navigationBar[0].title = "Mon dossier";
+            this.navigationBar[0].path = "";
+        }
+    }
+
+    public createSharedNavigationTab() {
+        this.navigationBar = [];
+        let folders = (this.currentPath + "/" + this.currentFolder).split("/").filter(Boolean);
+        this.navigationBar.push(new NavElement(""));
+        this.navigationBar[0].title = "Dossiers partagés";
+        this.navigationBar[0].folder = "";
+        this.navigationBar[0].path = "";
+        for (let ind = 0; ind < folders.length; ind++) {
+            this.navigationBar.push(new NavElement(folders[ind]));
+        }
+        let folderIndex = 1;
+        for (let ind = 0; ind < folders.length; ind++) {
+            this.navigationBar[folderIndex].path = (this.navigationBar[folderIndex - 1].path !== "" ? this.navigationBar[folderIndex - 1].path : "");
+            this.navigationBar[folderIndex].title = this.navigationBar[folderIndex].folder;
+            folderIndex++;
         }
     }
 
@@ -100,7 +128,8 @@ export class HomeComponent implements OnInit {
 
     public getElement(elementName: string) {
         if (elementName[elementName.length - 4] === ".") {
-            this.fileService.downloadFile(this._userData._id, elementName, this.currentPath + "/" + this.currentFolder)
+            const path = (this.currentPath === "" && this.currentFolder === "") ? "" : this.currentPath + "/" + this.currentFolder;
+            this.fileService.downloadFile(this._userData._id, elementName, path)
                 .then(res => fileSaver.saveAs(res, elementName))
                 .catch(error => console.log(error));
         } else {

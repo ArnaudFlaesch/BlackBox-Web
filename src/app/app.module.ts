@@ -11,9 +11,11 @@ import { RegisterComponent } from "./components/register/register.component";
 import { HomeComponent } from "./components/home/home.component";
 import { DndDirective } from "./directives/dnd.directive";
 import {FileService} from "./services/file.service";
-import {DialogNewFileComponent, DialogNewFolderComponent, DialogUserInfoComponent} from "./components/dialogs/DialogManager";
 import {MdDialogModule, MdFormFieldModule} from "@angular/material";
 import {NoopAnimationsModule} from "@angular/platform-browser/animations";
+import {DialogNewFileComponent} from "./components/dialogs/DialogNewFileComponent";
+import {DialogNewFolderComponent} from "./components/dialogs/DialogNewFolderComponent";
+import {DialogUserInfoComponent} from "./components/dialogs/DialogUserInfoComponent";
 
 @NgModule({
     declarations: [
