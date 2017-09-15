@@ -1,8 +1,6 @@
 import {AfterViewChecked, ChangeDetectorRef, Component, Inject} from "@angular/core";
 import {MD_DIALOG_DATA, MdDialogRef} from "@angular/material";
 
-import {Paypal} from "paypal-express-checkout";
-
 @Component({
     selector: "stockage",
     templateUrl: "stockage.html",

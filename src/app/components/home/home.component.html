@@ -27,22 +27,22 @@
                 </div>
                 <div class="col-md-3">
                     <span>
-                        <input class="form-control" type="text" (keyup)="filterList()" [(ngModel)]="search" placeholder="Rechercher un fichier ou un dossier" aria-label="Search">
+                        <input class="form-control" type="text" (keyup)="fileUtils.filterList()" [(ngModel)]="fileUtils.search" placeholder="Rechercher un fichier ou un dossier" aria-label="Search">
                     </span>
                 </div>
             </div>
 
             <div class="dropzone" appHome>
-                <span class="img-with-text" *ngFor="let element of _searchList" [contextMenu]="basicMenu" [contextMenuSubject]="element" (dblclick)="getElement(element)" style="margin : 0.5em">
-                    <img [src]="'../assets/' + getIcon(element) + '_icon.png'" />
+                <span class="img-with-text" *ngFor="let element of fileUtils.searchList | orderBy : ['+element']" [contextMenu]="basicMenu" [contextMenuSubject]="element" (dblclick)="getElement(element)" style="margin : 0.5em">
+                    <img [src]="'../assets/' + fileUtils.getIcon(element) + '_icon.png'" />
                     <span>{{ element }}</span>
                 </span>
                 <context-menu>
-                    <ng-template *ngIf="canShareElements" contextMenuItem (execute)="openDialogShare()">
-                        Partager
-                    </ng-template>
-                    <ng-template contextMenuItem passive="true">
-                        Input something: <input type="text">
+                    <ng-template contextMenuItem passive="true">Renommer : <input type="text">  <button class="btn btn-primary" (click)="renameElement(element)">Valider</button></ng-template>
+                    <ng-template *ngIf="this.currentPath === '' && this.currentFolder === ''" contextMenuItem (execute)="openDialogShare()"><span class="btn btn-primary">Partager</span></ng-template>
+                    <ng-template contextMenuItem (execute)="openDialogShare()">
+                        <span class="btn btn-primary">Déplacer l'élément</span>
+                        <span class="btn btn-danger">Supprimer</span>
                     </ng-template>
                 </context-menu>
             </div>

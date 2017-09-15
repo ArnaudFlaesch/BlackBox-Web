@@ -13,11 +13,11 @@ export class FileService {
         this.headers.append("Access-Control-Allow-Origin" , "*");
     }
 
-    public getContentFromFolder(userId: Number, elementName: String, path: String): Promise<String[]> {
+    public getContentFromFolder(userId: Number, elementName: string, path: string): Promise<string[]> {
         return this.http
             .get(this.SERVICES_URL + "/directory", {headers: this.headers, params: {userId : userId, elementName : elementName, path: path}})
             .toPromise()
-            .then(res => res.json() as String[])
+            .then(res => res.json() as string[])
             .catch(this.handleError);
     }
 

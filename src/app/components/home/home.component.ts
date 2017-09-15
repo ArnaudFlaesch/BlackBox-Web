@@ -12,6 +12,7 @@ import {DialogNewFolderComponent} from "../dialogs/DialogNewFolderComponent";
 import {DialogUserInfoComponent} from "../dialogs/DialogUserInfoComponent";
 import {DialogStockageComponent} from "../dialogs/DialogStockageComponent";
 import {ContextMenuComponent} from "ngx-contextmenu";
+import {FileUtils} from "../../utils/FileUtils";
 
 @Component({
     selector: "app-home",
@@ -25,12 +26,10 @@ export class HomeComponent implements OnInit {
     private _currentPath = "";
     private _currentFolder = "";
     private _userData: User = new User();
-    private _elementList: String[] = [];
-    private _searchList: String[] = [];
-    private _search = "";
     private navigationBar: NavElement[] = [];
-    private canShareElements: Boolean = false;
+    private isSharedFolderPage: Boolean = false;
     public emailPattern = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+    private fileUtils: FileUtils = new FileUtils();
 
     @ViewChild(ContextMenuComponent) public basicMenu: ContextMenuComponent;
 
@@ -47,7 +46,7 @@ export class HomeComponent implements OnInit {
 
     public displayPersonnalFolder() {
         this.pageTitle = "Dossier personnel";
-        this.canShareElements = false;
+        this.isSharedFolderPage = false;
         this.currentPath = "";
         this.currentFolder = this._userData._id.toString();
         this.displayFolderContents(this.currentFolder, this.currentPath);
@@ -55,13 +54,13 @@ export class HomeComponent implements OnInit {
 
     public displaySharedFolders() {
         this.pageTitle = "Dossiers partagés";
-        this.canShareElements = true;
+        this.isSharedFolderPage = true;
         this.currentFolder = "";
         this.currentPath = "";
         this.fileService.getSharedFolders(this._userData._id)
             .then(elementList => {
-                this.elementList = elementList;
-                this.searchList = elementList;
+                this.fileUtils.elementList = elementList;
+                this.fileUtils.searchList = elementList;
                 this.createSharedNavigationTab();
             })
             .catch(error => console.log(error));
@@ -72,9 +71,9 @@ export class HomeComponent implements OnInit {
             .then(elementList => {
                 this.currentFolder = elementName;
                 this.currentPath = path;
-                this.elementList = elementList;
-                this.searchList = elementList;
-                (this.canShareElements) ? this.createSharedNavigationTab() : this.createNavigationTab();
+                this.fileUtils.elementList = elementList;
+                this.fileUtils.searchList = elementList;
+                (this.isSharedFolderPage) ? this.createSharedNavigationTab() : this.createNavigationTab();
             })
             .catch(error => {
                 console.log(error);
@@ -89,14 +88,18 @@ export class HomeComponent implements OnInit {
     public createNavigationTab() {
         this.navigationBar = [];
         if (this.currentPath !== "") {
-            let folders = (this.currentPath + "/" + this.currentFolder).split("/").filter(Boolean);
+            const folders = (this.currentPath + "/" + this.currentFolder).split("/").filter(Boolean);
             for (let ind = 0; ind < folders.length; ind++) {
                 this.navigationBar.push(new NavElement(folders[ind]));
             }
             this.navigationBar[0].title = "Mon dossier";
             this.navigationBar[0].path = "";
             for (let ind = 1; ind < folders.length; ind++) {
-                this.navigationBar[ind].path = (this.navigationBar[ind - 1].path !== "" ?  "/" + this.navigationBar[ind - 1].path +  "/" + folders[ind] : "/" + folders[ind - 1]);
+                if (this.navigationBar[ind - 1].path !== "") {
+                    this.navigationBar[ind].path = "/" + this.navigationBar[ind - 1].path +  "/" + folders[ind];
+                } else {
+                    this.navigationBar[ind].path =  "/" + folders[ind - 1];
+                }
                 this.navigationBar[ind].title = this.navigationBar[ind].folder;
             }
         } else {
@@ -108,7 +111,7 @@ export class HomeComponent implements OnInit {
 
     public createSharedNavigationTab() {
         this.navigationBar = [];
-        let folders = (this.currentPath + "/" + this.currentFolder).split("/").filter(Boolean);
+        const folders = (this.currentPath + "/" + this.currentFolder).split("/").filter(Boolean);
         this.navigationBar.push(new NavElement(""));
         this.navigationBar[0].title = "Dossiers partagés";
         this.navigationBar[0].folder = "";
@@ -118,20 +121,18 @@ export class HomeComponent implements OnInit {
         }
         let folderIndex = 1;
         for (let ind = 0; ind < folders.length; ind++) {
-            this.navigationBar[folderIndex].path = (this.navigationBar[folderIndex - 1].path !== "" ? this.navigationBar[folderIndex - 1].path : "");
+            if (this.navigationBar[folderIndex - 1].path !== "") {
+                this.navigationBar[folderIndex].path = this.navigationBar[folderIndex - 1].path;
+            } else {
+                this.navigationBar[folderIndex].path = "";
+            }
             this.navigationBar[folderIndex].title = this.navigationBar[folderIndex].folder;
             folderIndex++;
         }
     }
 
-    public filterList() {
-        this._searchList = this.elementList.filter(
-            element => element.indexOf(this._search) !== -1
-        );
-    }
-
     public getElement(elementName: string) {
-        if (this.isFile(elementName)) {
+        if (this.fileUtils.isFile(elementName)) {
             const path = (this.currentPath === "" && this.currentFolder === "") ? "" : this.currentPath + "/" + this.currentFolder;
             this.fileService.downloadFile(this._userData._id, elementName, path)
                 .then(res => fileSaver.saveAs(res, elementName))
@@ -141,12 +142,8 @@ export class HomeComponent implements OnInit {
         }
     }
 
-    public isFile(elementName: string) {
-        if (elementName[elementName.length - 4] === ".") {
-            return(false);
-        } else {
-            return(true);
-        }
+    public renameElement(elementName: string, newElementName: string) {
+        console.log(elementName + " " + newElementName);
     }
 
     public getBreadCrumbClasses(elementName: string) {
@@ -157,7 +154,7 @@ export class HomeComponent implements OnInit {
         }
     }
 
-    openDialogNewFile(): void {
+    public openDialogNewFile(): void {
         const dialogRef = this.dialog.open(DialogNewFileComponent, {
             width: "33%"
         });
@@ -172,7 +169,7 @@ export class HomeComponent implements OnInit {
         });
     }
 
-    openDialogNewFolder(): void {
+    public openDialogNewFolder(): void {
         const dialogRef = this.dialog.open(DialogNewFolderComponent, {
             width: "33%"
         });
@@ -187,13 +184,13 @@ export class HomeComponent implements OnInit {
         });
     }
 
-    openDialogUserInfo(): void {
+    public openDialogUserInfo(): void {
         const dialogRef = this.dialog.open(DialogUserInfoComponent, {
             width: "40%"
         });
     }
 
-    openDialogStockage(): void {
+    public openDialogStockage(): void {
         const dialogRef = this.dialog.open(DialogStockageComponent, {
             width: "40%"
         });
@@ -201,18 +198,10 @@ export class HomeComponent implements OnInit {
         dialogRef.componentInstance.premiumDateOfExpiration = this.userData.premiumDateOfExpiration;
     }
 
-    openDialogShare(): void {
+    public openDialogShare(): void {
         const dialogRef = this.dialog.open(DialogStockageComponent, {
             width: "40%"
         });
-    }
-
-    public getIcon(elementName: String): String {
-        if (elementName[elementName.length - 4] === ".") {
-            return("file");
-        } else {
-            return ("folder");
-        }
     }
 
     public logout() {
@@ -236,31 +225,7 @@ export class HomeComponent implements OnInit {
         this._currentPath = value;
     }
 
-    get elementList(): String[] {
-        return this._elementList;
-    }
-
-    set elementList(elementList: String[]) {
-        this._elementList = elementList;
-    }
-
     get userData(): User {
         return this._userData;
-    }
-
-    get searchList(): String[] {
-        return this._searchList;
-    }
-
-    set searchList(value: String[]) {
-        this._searchList = value;
-    }
-
-    get search(): string {
-        return this._search;
-    }
-
-    set search(value: string) {
-        this._search = value;
     }
 }

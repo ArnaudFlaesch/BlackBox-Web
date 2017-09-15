@@ -21,6 +21,7 @@ import {ContextMenuModule} from "ngx-contextmenu";
 import {DialogShareComponent} from "./components/dialogs/DialogShareComponent";
 import {DialogRenameComponent} from "./components/dialogs/DialogRenameComponent";
 import {DialogMoveComponent} from "./components/dialogs/DialogMoveComponent";
+import { OrderModule } from "ngx-order-pipe";
 
 @NgModule({
     declarations: [
@@ -45,7 +46,8 @@ import {DialogMoveComponent} from "./components/dialogs/DialogMoveComponent";
       HttpModule,
       MdDialogModule,
       MdFormFieldModule,
-      NoopAnimationsModule
+      NoopAnimationsModule,
+      OrderModule
   ],
     entryComponents: [DialogMoveComponent, DialogNewFileComponent, DialogNewFolderComponent,
         DialogRenameComponent, DialogShareComponent, DialogUserInfoComponent, DialogStockageComponent],
