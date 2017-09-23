@@ -12,6 +12,7 @@ export class DialogNewFolderComponent implements AfterViewChecked {
     private _folderName = "";
     private _currentPath = "";
     private _currentFolder = "";
+    public error: Error;
 
     constructor(private cdRef: ChangeDetectorRef, public dialogRef: MdDialogRef<DialogNewFolderComponent>,
                 @Inject(MD_DIALOG_DATA) public data: any,
@@ -27,9 +28,10 @@ export class DialogNewFolderComponent implements AfterViewChecked {
     }
 
     createNewFolder() {
-        let userId = this.userService.getUserDataFromSession()._id;
-        this.fileService.createNewFolder(userId, this.folderName, this.currentFolder, this.currentPath);
-        this.dialogRef.close();
+        const userId = this.userService.getUserDataFromSession()._id;
+        this.fileService.createNewFolder(userId, this.folderName, this.currentFolder, this.currentPath)
+            .then(() => this.dialogRef.close())
+            .catch(error => this.error = JSON.parse(error._body).error);
     }
 
     get folderName(): string {

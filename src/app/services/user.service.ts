@@ -57,7 +57,9 @@ export class UserService {
 
     public updateUserPassword(userId: Number, oldPassword: string, newPassword: string): Promise<User> {
         return this.http
-            .post(this.SERVICES_URL + "/updateUserPassword", {"userId": userId, "oldPassword": oldPassword, "newPassword": newPassword}, {headers: this.headers})
+            .post(this.SERVICES_URL + "/updateUserPassword",
+                {"userId": userId, "oldPassword": oldPassword, "newPassword": newPassword},
+                {headers: this.headers})
             .toPromise()
             .then(res => res.json())
             .catch(this.handleError);
@@ -72,7 +74,6 @@ export class UserService {
     }
 
     private handleError(error: any): Promise<any> {
-        console.error("An error occurred", error);
         return Promise.reject(error.message || error);
     }
 }

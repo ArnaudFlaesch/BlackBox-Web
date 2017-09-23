@@ -7,6 +7,9 @@
     <div *ngIf="email.errors && (email.dirty || email.touched)">
         L'email n'est pas valide.
     </div>
+    <div *ngIf="error">
+        {{ error }}
+    </div>
     <br />
 </div>
 

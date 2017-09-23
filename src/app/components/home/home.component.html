@@ -12,11 +12,14 @@
             </div>
         </div>
         <div class="col-md-10">
+            <div *ngIf="error">
+                {{ error }}
+            </div>
             <h3>{{ pageTitle }}</h3>
             <div class="row">
                 <div class="col-md-6">
                     <ol [hidden]="navigationBar.length === 0" class="breadcrumb">
-                        <li *ngFor="let navElement of navigationBar" (click)="displayFolderContents(navElement.folder, navElement.path)" [ngClass]="getBreadCrumbClasses(navElement.folder)">{{ navElement.title }}</li>
+                        <li *ngFor="let navElement of navigationBar;  let ind = index;" (click)="displayFolderContents(navElement.folder, navElement.path)" [ngClass]="fileUtils.getBreadCrumbClasses(ind, navigationBar.length)">{{ navElement.title }}</li>
                     </ol>
                 </div>
                 <div class="col-md-3">
@@ -46,14 +49,14 @@
                             <br />
                         </div>
                     </ng-template>
-                    <ng-template contextMenuItem *ngIf="this.currentPath === '' && this.currentFolder === ''" contextMenuItem (execute)="openDialogShare()"><span class="btn btn-primary">Partager</span></ng-template>
-                    <ng-template contextMenuItem (execute)="openDialogShare()">
-                        <span class="btn btn-primary">Déplacer l'élément</span>
-                        <ng-template contextMenuItem let-item passive="true">
-                            Renommer : <input type="text" name="name" required maxlength="255" #name="ngModel" [pattern]="fileNamePattern" [(ngModel)]="fileUtils.newElementName">
-                            <button class="btn btn-primary" (click)="fileUtils.renameElement(item?.name)">{{item?.name}}</button>
-                        </ng-template>
-                        <span class="btn btn-danger">Supprimer</span>
+                    <ng-template contextMenuItem let-item passive="true">
+                        <div class="btn btn-primary" *ngIf="this.currentPath === '' && this.currentFolder === ''">Partager</div>
+                        <div class="btn btn-primary">Déplacer</div>
+                        <div>
+                            <input type="text" name="name" required maxlength="255" #name="ngModel" [pattern]="fileNamePattern" [(ngModel)]="newElementName">
+                            <button class="btn btn-primary" (click)="renameElement(item?.name)">Renommer</button>
+                        </div>
+                        <div class="btn btn-danger" (click)="deleteElement(item?.name)">Supprimer</div>
                     </ng-template>
                 </context-menu>
             </div>

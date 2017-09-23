@@ -10,6 +10,9 @@
             <div *ngIf="password.errors && (password.dirty || password.touched)">
                 Le mot de passe doit faire entre 8 et 20 caractères.
             </div>
+            <div *ngIf="error">
+                {{ error }}
+            </div>
             <br />
         </div>
 

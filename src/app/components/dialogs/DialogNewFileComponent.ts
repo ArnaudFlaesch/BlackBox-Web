@@ -13,6 +13,7 @@ export class DialogNewFileComponent  implements AfterViewChecked {
     private _currentPath = "";
     private _currentFolder = "";
     public fileNamePattern = /[^\\]*\.[a-zA-Z]{3}$/;
+    public error: Error;
 
     constructor(private cdRef: ChangeDetectorRef, public dialogRef: MdDialogRef<DialogNewFileComponent>,
                 @Inject(MD_DIALOG_DATA) public data: any,
@@ -28,9 +29,10 @@ export class DialogNewFileComponent  implements AfterViewChecked {
     }
 
     createNewFile() {
-        let userId = this.userService.getUserDataFromSession()._id;
-        this.fileService.createNewFile(userId, this.fileName, this.currentFolder, this.currentPath);
-        this.dialogRef.close();
+        const userId = this.userService.getUserDataFromSession()._id;
+        this.fileService.createNewFile(userId, this.fileName, this.currentFolder, this.currentPath)
+            .then(() =>  this.dialogRef.close())
+            .catch(error => this.error = JSON.parse(error._body).error);
     }
 
     get fileName(): string {

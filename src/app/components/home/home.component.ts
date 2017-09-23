@@ -30,6 +30,8 @@ export class HomeComponent implements OnInit {
     private isSharedFolderPage: Boolean = false;
     public fileNamePattern = /[^\\]*\.[a-zA-Z]{3}$/;
     public emailPattern = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+    private newElementName = "";
+    private error: Error;
     private fileUtils: FileUtils = new FileUtils();
 
     @ViewChild(ContextMenuComponent) public basicMenu: ContextMenuComponent;
@@ -64,7 +66,7 @@ export class HomeComponent implements OnInit {
                 this.fileUtils.filterList();
                 this.createSharedNavigationTab();
             })
-            .catch(error => console.log(error));
+            .catch(error => this.error = error);
     }
 
     public displayFolderContents(elementName: string, path: string) {
@@ -76,9 +78,7 @@ export class HomeComponent implements OnInit {
                 this.fileUtils.filterList();
                 (this.isSharedFolderPage) ? this.createSharedNavigationTab() : this.createNavigationTab();
             })
-            .catch(error => {
-                console.log(error);
-            });
+            .catch(error => this.error = error);
     }
 
     public navigateToFolder(elementName: string) {
@@ -137,18 +137,24 @@ export class HomeComponent implements OnInit {
             const path = (this.currentPath === "" && this.currentFolder === "") ? "" : this.currentPath + "/" + this.currentFolder;
             this.fileService.downloadFile(this._userData._id, elementName, path)
                 .then(res => fileSaver.saveAs(res, elementName))
-                .catch(error => console.log(error));
+                .catch(error => this.error = JSON.parse(error._body).error);
         } else {
             this.navigateToFolder(elementName);
         }
     }
 
-    public getBreadCrumbClasses(elementName: string) {
-        if (elementName === this.currentFolder) {
-            return("breadcrumb-item active success");
-        } else {
-            return("breadcrumb-item");
-        }
+    public renameElement(elementName: string) {
+        const path = (this.currentPath === "" && this.currentFolder === "") ? "" : this.currentPath + "/" + this.currentFolder;
+        this.fileService.renameElement(this.userData._id, elementName, this.newElementName, path)
+            .then(() => this.displayFolderContents(this.currentFolder, this.currentPath))
+            .catch(error => this.error = JSON.parse(error._body).error);
+    }
+
+    public deleteElement(elementName: string) {
+        const path = (this.currentPath === "" && this.currentFolder === "") ? "" : this.currentPath + "/" + this.currentFolder;
+        this.fileService.deleteElement(this.userData._id, elementName, path)
+            .then(() => this.displayFolderContents(this.currentFolder, this.currentPath))
+            .catch(error => this.error = JSON.parse(error._body).error);
     }
 
     public openDialogNewFile(): void {

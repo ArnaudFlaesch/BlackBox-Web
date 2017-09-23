@@ -1,11 +1,10 @@
-import {Element} from "../model/Element";
+import {Element} from "../model/element";
 
 export class FileUtils {
 
     private _search = "";
     private _elementList: string[] = [];
     private _searchList: Element[] = [];
-    private _newElementName = "";
 
     public constructor() {}
 
@@ -15,15 +14,19 @@ export class FileUtils {
             .map(element => new Element(element));
     }
 
-    public renameElement(event) {
-        console.log(event + " " + this.newElementName);
-    }
-
     public isFile(elementName: string) {
         if (elementName[elementName.length - 4] === "." || elementName[elementName.length - 5] === ".") {
             return(true);
         } else {
             return(false);
+        }
+    }
+
+    public getBreadCrumbClasses(currentIndex: number, length: number) {
+        if (currentIndex === length - 1) {
+            return("breadcrumb-item active success");
+        } else {
+            return("breadcrumb-item");
         }
     }
 
@@ -75,13 +78,5 @@ export class FileUtils {
 
     set searchList(value: Element[]) {
         this._searchList = value;
-    }
-
-    get newElementName(): string {
-        return this._newElementName;
-    }
-
-    set newElementName(value: string) {
-        this._newElementName = value;
     }
 }

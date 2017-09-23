@@ -4,6 +4,9 @@
     <div *ngIf="name.errors && (name.dirty || name.touched)">
         Le nom du dossier est obligatoire.
     </div>
+    <div *ngIf="error">
+        {{ error }}
+    </div>
     <br />
 </div>
 

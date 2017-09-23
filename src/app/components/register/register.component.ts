@@ -12,6 +12,7 @@ export class RegisterComponent implements AfterViewChecked {
 
     private _registeredUser: User;
     public emailPattern = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+    public error: Error;
 
     constructor(private cdRef: ChangeDetectorRef, private userService: UserService, private router: Router) {
         this.registeredUser = new User();
@@ -29,11 +30,11 @@ export class RegisterComponent implements AfterViewChecked {
                         this.router.navigate(["/home"]);
                     })
                     .catch(error => {
-                        console.log(error);
+                        this.error = JSON.parse(error._body).error;
                     });
             })
             .catch(error => {
-                console.log(error);
+                this.error = JSON.parse(error._body).error;
             });
     }
 
