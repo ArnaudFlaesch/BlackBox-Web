@@ -32,8 +32,8 @@ export class FileService {
     public uploadFiles(files: File[], path, userId: Number) {
         if (files.length > 0) {
             for (let i = 0; i < files.length; i++) {
-                let file = files[i];
-                let formData: FormData = new FormData();
+                const file = files[i];
+                const formData: FormData = new FormData();
                 formData.append("documents", file);
                 this.http.post(this.SERVICES_URL + "/upload", formData, {headers: this.headers, params: {path: path, userId: userId}})
                     .toPromise()

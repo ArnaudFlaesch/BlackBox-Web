@@ -28,6 +28,7 @@ export class HomeComponent implements OnInit {
     private _userData: User = new User();
     private navigationBar: NavElement[] = [];
     private isSharedFolderPage: Boolean = false;
+    public fileNamePattern = /[^\\]*\.[a-zA-Z]{3}$/;
     public emailPattern = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     private fileUtils: FileUtils = new FileUtils();
 
@@ -60,7 +61,7 @@ export class HomeComponent implements OnInit {
         this.fileService.getSharedFolders(this._userData._id)
             .then(elementList => {
                 this.fileUtils.elementList = elementList;
-                this.fileUtils.searchList = elementList;
+                this.fileUtils.filterList();
                 this.createSharedNavigationTab();
             })
             .catch(error => console.log(error));
@@ -72,7 +73,7 @@ export class HomeComponent implements OnInit {
                 this.currentFolder = elementName;
                 this.currentPath = path;
                 this.fileUtils.elementList = elementList;
-                this.fileUtils.searchList = elementList;
+                this.fileUtils.filterList();
                 (this.isSharedFolderPage) ? this.createSharedNavigationTab() : this.createNavigationTab();
             })
             .catch(error => {
@@ -140,10 +141,6 @@ export class HomeComponent implements OnInit {
         } else {
             this.navigateToFolder(elementName);
         }
-    }
-
-    public renameElement(elementName: string, newElementName: string) {
-        console.log(elementName + " " + newElementName);
     }
 
     public getBreadCrumbClasses(elementName: string) {

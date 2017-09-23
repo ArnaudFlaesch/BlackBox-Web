@@ -33,15 +33,26 @@
             </div>
 
             <div class="dropzone" appHome>
-                <span class="img-with-text" *ngFor="let element of fileUtils.searchList | orderBy : ['+element']" [contextMenu]="basicMenu" [contextMenuSubject]="element" (dblclick)="getElement(element)" style="margin : 0.5em">
-                    <img [src]="'../assets/' + fileUtils.getIcon(element) + '_icon.png'" />
-                    <span>{{ element }}</span>
+                <span class="img-with-text" *ngFor="let element of fileUtils.searchList | orderBy : ['+element.name']" [contextMenu]="basicMenu" [contextMenuSubject]="element" (dblclick)="getElement(element.name)" style="margin : 0.5em">
+                    <img [src]="'../assets/' + fileUtils.getIcon(element.name) + '_icon.png'" />
+                    <span>{{ element.name }}</span>
                 </span>
                 <context-menu>
-                    <ng-template contextMenuItem passive="true">Renommer : <input type="text">  <button class="btn btn-primary" (click)="renameElement(element)">Valider</button></ng-template>
-                    <ng-template *ngIf="this.currentPath === '' && this.currentFolder === ''" contextMenuItem (execute)="openDialogShare()"><span class="btn btn-primary">Partager</span></ng-template>
+                    <ng-template>
+                        <div style="color: red">
+                            <div *ngIf="name.errors && (name.dirty || name.touched)">
+                                Le nom du fichier est obligatoire et doit comporter son extension (.txt, .doc, etc.).
+                            </div>
+                            <br />
+                        </div>
+                    </ng-template>
+                    <ng-template contextMenuItem *ngIf="this.currentPath === '' && this.currentFolder === ''" contextMenuItem (execute)="openDialogShare()"><span class="btn btn-primary">Partager</span></ng-template>
                     <ng-template contextMenuItem (execute)="openDialogShare()">
                         <span class="btn btn-primary">Déplacer l'élément</span>
+                        <ng-template contextMenuItem let-item passive="true">
+                            Renommer : <input type="text" name="name" required maxlength="255" #name="ngModel" [pattern]="fileNamePattern" [(ngModel)]="fileUtils.newElementName">
+                            <button class="btn btn-primary" (click)="fileUtils.renameElement(item?.name)">{{item?.name}}</button>
+                        </ng-template>
                         <span class="btn btn-danger">Supprimer</span>
                     </ng-template>
                 </context-menu>

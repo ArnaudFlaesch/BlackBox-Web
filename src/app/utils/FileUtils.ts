@@ -1,13 +1,22 @@
+import {Element} from "../model/Element";
+
 export class FileUtils {
 
     private _search = "";
     private _elementList: string[] = [];
-    private _searchList: string[] = [];
+    private _searchList: Element[] = [];
+    private _newElementName = "";
 
     public constructor() {}
 
     public filterList() {
-        this.searchList = this.elementList.filter(element => element.indexOf(this._search) !== -1);
+        this.searchList = this.elementList
+            .filter(element => element.indexOf(this._search) !== -1)
+            .map(element => new Element(element));
+    }
+
+    public renameElement(event) {
+        console.log(event + " " + this.newElementName);
     }
 
     public isFile(elementName: string) {
@@ -60,11 +69,19 @@ export class FileUtils {
         this._elementList = value;
     }
 
-    get searchList(): string[] {
+    get searchList(): Element[] {
         return this._searchList;
     }
 
-    set searchList(value: string[]) {
+    set searchList(value: Element[]) {
         this._searchList = value;
+    }
+
+    get newElementName(): string {
+        return this._newElementName;
+    }
+
+    set newElementName(value: string) {
+        this._newElementName = value;
     }
 }

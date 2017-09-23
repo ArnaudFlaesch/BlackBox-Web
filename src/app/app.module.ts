@@ -19,7 +19,6 @@ import {DialogUserInfoComponent} from "./components/dialogs/DialogUserInfoCompon
 import {DialogStockageComponent} from "./components/dialogs/DialogStockageComponent";
 import {ContextMenuModule} from "ngx-contextmenu";
 import {DialogShareComponent} from "./components/dialogs/DialogShareComponent";
-import {DialogRenameComponent} from "./components/dialogs/DialogRenameComponent";
 import {DialogMoveComponent} from "./components/dialogs/DialogMoveComponent";
 import { OrderModule } from "ngx-order-pipe";
 
@@ -33,7 +32,6 @@ import { OrderModule } from "ngx-order-pipe";
         DialogMoveComponent,
         DialogNewFileComponent,
         DialogNewFolderComponent,
-        DialogRenameComponent,
         DialogShareComponent,
         DialogStockageComponent,
         DialogUserInfoComponent
@@ -50,7 +48,7 @@ import { OrderModule } from "ngx-order-pipe";
       OrderModule
   ],
     entryComponents: [DialogMoveComponent, DialogNewFileComponent, DialogNewFolderComponent,
-        DialogRenameComponent, DialogShareComponent, DialogUserInfoComponent, DialogStockageComponent],
+        DialogShareComponent, DialogUserInfoComponent, DialogStockageComponent],
     providers: [UserService, FileService],
     bootstrap: [BlackBoxComponent]
 })
