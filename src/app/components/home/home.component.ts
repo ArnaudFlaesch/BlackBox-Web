@@ -3,8 +3,6 @@ import {UserService} from "../../services/user.service";
 import {Router} from "@angular/router";
 import {User} from "../../model/user";
 import {FileService} from "../../services/file.service";
-import * as fileSaver from "file-saver";
-
 import {MdDialog} from "@angular/material";
 import {NavElement} from "../../model/navElement";
 import {DialogNewFileComponent} from "../dialogs/DialogNewFileComponent";
@@ -13,6 +11,9 @@ import {DialogUserInfoComponent} from "../dialogs/DialogUserInfoComponent";
 import {DialogStockageComponent} from "../dialogs/DialogStockageComponent";
 import {ContextMenuComponent} from "ngx-contextmenu";
 import {FileUtils} from "../../utils/FileUtils";
+import {DialogShareComponent} from "../dialogs/DialogShareComponent";
+
+import * as fileSaver from "file-saver";
 
 @Component({
     selector: "app-home",
@@ -188,9 +189,7 @@ export class HomeComponent implements OnInit {
     }
 
     public openDialogUserInfo(): void {
-        const dialogRef = this.dialog.open(DialogUserInfoComponent, {
-            width: "40%"
-        });
+        this.dialog.open(DialogUserInfoComponent, { width: "40%" });
     }
 
     public openDialogStockage(): void {
@@ -201,10 +200,12 @@ export class HomeComponent implements OnInit {
         dialogRef.componentInstance.premiumDateOfExpiration = this.userData.premiumDateOfExpiration;
     }
 
-    public openDialogShare(): void {
-        const dialogRef = this.dialog.open(DialogStockageComponent, {
+    public openDialogShare(elementName: string): void {
+        const dialogRef = this.dialog.open(DialogShareComponent, {
             width: "40%"
         });
+        dialogRef.componentInstance.elementName = elementName;
+        dialogRef.componentInstance.currentPath = this.currentPath;
     }
 
     public logout() {

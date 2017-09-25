@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import {Headers, Http, ResponseContentType} from "@angular/http";
-import "rxjs/Rx";
 import {environment} from "../../environments/environment";
+import "rxjs/Rx";
+import {UserFolderPermission} from "../model/UserFolderPermission";
 
 @Injectable()
 export class FileService {
@@ -76,6 +77,25 @@ export class FileService {
             {headers: this.headers})
             .toPromise()
             .then(response => response.json())
+            .catch(this.handleError);
+    }
+
+    public saveUserToSharedElement(userId: Number, elementName: string, currentPath: string,
+                                   newUserEmail: string, newUserId: Number, canDownload: Boolean, canUpload: Boolean): Promise<any> {
+        return this.http.post(this.SERVICE_ENDPOINT + "/saveSharedUser",
+            {userId : userId, elementName: elementName, path: currentPath, sharedUserEmail: newUserEmail,
+                sharedUserId: newUserId, canDownload: canDownload, canUpload: canUpload},
+            {headers: this.headers})
+            .toPromise()
+            .then(response => response.json())
+            .catch(this.handleError);
+    }
+
+    public getUsersWhoShareElement(userId: Number, elementName: string, currentPath: string): Promise<UserFolderPermission[]> {
+        return this.http.get(this.SERVICE_ENDPOINT + "/listOfSharedUsers",
+            {headers: this.headers, params: {userId : userId, elementName: elementName, path: currentPath}})
+            .toPromise()
+            .then(response => response.json() as UserFolderPermission)
             .catch(this.handleError);
     }
 

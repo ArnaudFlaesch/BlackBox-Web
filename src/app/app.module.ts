@@ -1,6 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
-
 import { BlackBoxComponent } from "./app.component";
 import {UserService} from "./services/user.service";
 import {FormsModule} from "@angular/forms";
