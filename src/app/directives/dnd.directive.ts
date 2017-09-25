@@ -26,7 +26,15 @@ export class DndDirective {
         evt.preventDefault();
         evt.stopPropagation();
         this.background = "#eee";
-        this.fileService.uploadFiles(evt.dataTransfer.files, this.homeComponent.currentFolder, this.homeComponent.userData._id);
+        let path = "";
+        if (this.homeComponent.currentFolder === "" && this.homeComponent.currentPath === "") {
+            path = "";
+        } else if (this.homeComponent.currentPath === "") {
+                path = this.homeComponent.currentFolder;
+        } else {
+            path = (this.homeComponent.currentPath + "/" + this.homeComponent.currentFolder);
+        }
+        this.fileService.uploadFiles(evt.dataTransfer.files, path, this.homeComponent.userData._id);
         this.homeComponent.displayFolderContents(this.homeComponent.currentFolder, this.homeComponent.currentPath);
     }
 }

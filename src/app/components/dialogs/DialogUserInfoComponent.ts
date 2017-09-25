@@ -14,6 +14,7 @@ export class DialogUserInfoComponent implements AfterViewChecked {
     private _oldPassword =  "";
     private _newPassword =  "";
     private _password =  "";
+    public emailPattern = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     public error: Error;
 
     constructor(private cdRef: ChangeDetectorRef, public dialogRef: MdDialogRef<DialogUserInfoComponent>, private router: Router,

@@ -15,17 +15,17 @@
 
 <div class="form-group">
     <label for="exampleInputName1">Nom</label>
-    <input type="text" class="form-control" required maxlength="255" name="name" #name="ngModel" [(ngModel)]="_newUserInfos.name" id="exampleInputName1" placeholder="Nom">
+    <input type="text" class="form-control" required maxlength="255" name="name" #name="ngModel" [(ngModel)]="newUserInfos.name" id="exampleInputName1" placeholder="Nom">
 </div>
 
 <div class="form-group">
     <label for="exampleInputFirstname1">Prénom</label>
-    <input type="text" class="form-control" required maxlength="255" name="firstname" #firstname="ngModel" [(ngModel)]="_newUserInfos.firstname" id="exampleInputFirstname1" placeholder="Prénom">
+    <input type="text" class="form-control" required maxlength="255" name="firstname" #firstname="ngModel" [(ngModel)]="newUserInfos.firstname" id="exampleInputFirstname1" placeholder="Prénom">
 </div>
 
 <div class="form-group">
     <label for="exampleInputEmail1">Email address</label>
-    <input type="email" class="form-control" required maxlength="255" name="email" #email="ngModel" [pattern]="this.emailPattern" [(ngModel)]="_newUserInfos.email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+    <input type="email" class="form-control" required maxlength="255" name="email" #email="ngModel" [pattern]="emailPattern" [(ngModel)]="newUserInfos.email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
     <small id="emailHelp" class="form-text text-muted">Votre email vous servira d'identifiant pour vous connecter au site.</small>
 </div>
 

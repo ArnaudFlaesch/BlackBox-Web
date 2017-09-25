@@ -9,9 +9,10 @@
     "node": "7.0.0"
   },
   "scripts": {
+    "preinstall": "npm i -g @angular/cli",
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "ng serve --dev",
+    "build": "ng build --dev",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "test": "ng test --code-coverage"

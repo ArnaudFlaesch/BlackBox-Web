@@ -1,21 +1,21 @@
 import { Injectable } from "@angular/core";
 import {Headers, Http, ResponseContentType} from "@angular/http";
 import "rxjs/Rx";
+import {environment} from "../../environments/environment";
 
 @Injectable()
 export class FileService {
 
     private headers = new Headers();
-    private SERVICES_URL = "http://localhost:3000/element";
+    private SERVICE_ENDPOINT = environment.SERVICES_URL + "/element";
 
     public constructor(private http: Http) {
         this.headers.append("Accept", "*");
-        this.headers.append("Access-Control-Allow-Origin" , "*");
     }
 
     public getContentFromFolder(userId: Number, elementName: string, path: string): Promise<string[]> {
         return this.http
-            .get(this.SERVICES_URL + "/directory",
+            .get(this.SERVICE_ENDPOINT + "/directory",
                 {headers: this.headers, params: {userId : userId, elementName : elementName, path: path}})
             .toPromise()
             .then(res => res.json() as string[])
@@ -24,7 +24,7 @@ export class FileService {
 
     public getSharedFolders(userId: Number): Promise<any> {
         return this.http
-            .get(this.SERVICES_URL + "/sharedFolders", {headers: this.headers, params: {userId : userId }})
+            .get(this.SERVICE_ENDPOINT + "/sharedFolders", {headers: this.headers, params: {userId : userId }})
             .toPromise()
             .then(folderList => folderList.json())
             .catch(this.handleError);
@@ -36,14 +36,15 @@ export class FileService {
                 const file = files[i];
                 formData.append("documents", file);
             }
-            return this.http.post(this.SERVICES_URL + "/upload", formData, {headers: this.headers, params: {path: path, userId: userId}})
+            return this.http.post(this.SERVICE_ENDPOINT + "/upload", formData,
+                {headers: this.headers, params: {path: path, userId: userId}})
                 .toPromise()
                 .then(res => res.json())
                 .catch(this.handleError);
     }
 
     public downloadFile(userId: Number, fileName: string, currentPath: string): Promise<any> {
-        return this.http.get(this.SERVICES_URL + "/download",
+        return this.http.get(this.SERVICE_ENDPOINT + "/download",
             {headers: this.headers,
                 params: {userId : userId, elementName : fileName, path: currentPath}, responseType: ResponseContentType.Blob})
             .toPromise()
@@ -52,7 +53,7 @@ export class FileService {
     }
 
     public createNewFile(userId: Number, fileName: string, folderTo: string, currentPath: string): Promise<any> {
-        return this.http.post(this.SERVICES_URL + "/newFile",
+        return this.http.post(this.SERVICE_ENDPOINT + "/newFile",
             {userId : userId, elementName : fileName, folderTo: folderTo, path: currentPath},
             {headers: this.headers})
             .toPromise()
@@ -61,7 +62,7 @@ export class FileService {
     }
 
     public createNewFolder(userId: Number, folderName: string, folderTo: string, currentPath: string): Promise<any> {
-        return this.http.post(this.SERVICES_URL + "/newFolder",
+        return this.http.post(this.SERVICE_ENDPOINT + "/newFolder",
             {userId : userId, elementName : folderName, folderTo: folderTo, path: currentPath},
             {headers: this.headers})
             .toPromise()
@@ -70,7 +71,7 @@ export class FileService {
     }
 
     public renameElement(userId: Number, elementName: string, newElementName: string, currentPath: string): Promise<any> {
-        return this.http.post(this.SERVICES_URL + "/renameElement",
+        return this.http.post(this.SERVICE_ENDPOINT + "/renameElement",
             {userId : userId, elementName: elementName, newElementName: newElementName, path: currentPath},
             {headers: this.headers})
             .toPromise()
@@ -79,7 +80,7 @@ export class FileService {
     }
 
     public deleteElement(userId: Number, elementName: string, currentPath: string): Promise<any> {
-        return this.http.delete(this.SERVICES_URL + "/deleteElement",
+        return this.http.delete(this.SERVICE_ENDPOINT + "/deleteElement",
             {headers: this.headers, params: {userId : userId, elementName : elementName, path: currentPath}})
             .toPromise()
             .then(response => response.json())

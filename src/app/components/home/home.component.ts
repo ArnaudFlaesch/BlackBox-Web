@@ -22,17 +22,17 @@ import {FileUtils} from "../../utils/FileUtils";
 })
 
 export class HomeComponent implements OnInit {
-    private pageTitle = "";
+    private _pageTitle = "";
     private _currentPath = "";
     private _currentFolder = "";
     private _userData: User = new User();
-    private navigationBar: NavElement[] = [];
+    private _navigationBar: NavElement[] = [];
     private isSharedFolderPage: Boolean = false;
     public fileNamePattern = /[^\\]*\.[a-zA-Z]{3}$/;
     public emailPattern = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
-    private newElementName = "";
-    private error: Error;
-    private fileUtils: FileUtils = new FileUtils();
+    private _newElementName = "";
+    private _error: Error;
+    private _fileUtils: FileUtils = new FileUtils();
 
     @ViewChild(ContextMenuComponent) public basicMenu: ContextMenuComponent;
 
@@ -48,7 +48,7 @@ export class HomeComponent implements OnInit {
     }
 
     public displayPersonnalFolder() {
-        this.pageTitle = "Dossier personnel";
+        this._pageTitle = "Dossier personnel";
         this.isSharedFolderPage = false;
         this.currentPath = "";
         this.currentFolder = this._userData._id.toString();
@@ -56,17 +56,17 @@ export class HomeComponent implements OnInit {
     }
 
     public displaySharedFolders() {
-        this.pageTitle = "Dossiers partagés";
+        this._pageTitle = "Dossiers partagés";
         this.isSharedFolderPage = true;
         this.currentFolder = "";
         this.currentPath = "";
         this.fileService.getSharedFolders(this._userData._id)
             .then(elementList => {
-                this.fileUtils.elementList = elementList;
-                this.fileUtils.filterList();
+                this._fileUtils.elementList = elementList;
+                this._fileUtils.filterList();
                 this.createSharedNavigationTab();
             })
-            .catch(error => this.error = error);
+            .catch(error => this._error = error);
     }
 
     public displayFolderContents(elementName: string, path: string) {
@@ -74,11 +74,11 @@ export class HomeComponent implements OnInit {
             .then(elementList => {
                 this.currentFolder = elementName;
                 this.currentPath = path;
-                this.fileUtils.elementList = elementList;
-                this.fileUtils.filterList();
+                this._fileUtils.elementList = elementList;
+                this._fileUtils.filterList();
                 (this.isSharedFolderPage) ? this.createSharedNavigationTab() : this.createNavigationTab();
             })
-            .catch(error => this.error = error);
+            .catch(error => this._error = error);
     }
 
     public navigateToFolder(elementName: string) {
@@ -87,57 +87,57 @@ export class HomeComponent implements OnInit {
     }
 
     public createNavigationTab() {
-        this.navigationBar = [];
+        this._navigationBar = [];
         if (this.currentPath !== "") {
             const folders = (this.currentPath + "/" + this.currentFolder).split("/").filter(Boolean);
             for (let ind = 0; ind < folders.length; ind++) {
-                this.navigationBar.push(new NavElement(folders[ind]));
+                this._navigationBar.push(new NavElement(folders[ind]));
             }
-            this.navigationBar[0].title = "Mon dossier";
-            this.navigationBar[0].path = "";
+            this._navigationBar[0].title = "Mon dossier";
+            this._navigationBar[0].path = "";
             for (let ind = 1; ind < folders.length; ind++) {
-                if (this.navigationBar[ind - 1].path !== "") {
-                    this.navigationBar[ind].path = "/" + this.navigationBar[ind - 1].path +  "/" + folders[ind];
+                if (this._navigationBar[ind - 1].path !== "") {
+                    this._navigationBar[ind].path = "/" + this._navigationBar[ind - 1].path +  "/" + folders[ind];
                 } else {
-                    this.navigationBar[ind].path =  "/" + folders[ind - 1];
+                    this._navigationBar[ind].path =  "/" + folders[ind - 1];
                 }
-                this.navigationBar[ind].title = this.navigationBar[ind].folder;
+                this._navigationBar[ind].title = this._navigationBar[ind].folder;
             }
         } else {
-            this.navigationBar.push(new NavElement(""));
-            this.navigationBar[0].title = "Mon dossier";
-            this.navigationBar[0].path = "";
+            this._navigationBar.push(new NavElement(""));
+            this._navigationBar[0].title = "Mon dossier";
+            this._navigationBar[0].path = "";
         }
     }
 
     public createSharedNavigationTab() {
-        this.navigationBar = [];
+        this._navigationBar = [];
         const folders = (this.currentPath + "/" + this.currentFolder).split("/").filter(Boolean);
-        this.navigationBar.push(new NavElement(""));
-        this.navigationBar[0].title = "Dossiers partagés";
-        this.navigationBar[0].folder = "";
-        this.navigationBar[0].path = "";
+        this._navigationBar.push(new NavElement(""));
+        this._navigationBar[0].title = "Dossiers partagés";
+        this._navigationBar[0].folder = "";
+        this._navigationBar[0].path = "";
         for (let ind = 0; ind < folders.length; ind++) {
-            this.navigationBar.push(new NavElement(folders[ind]));
+            this._navigationBar.push(new NavElement(folders[ind]));
         }
         let folderIndex = 1;
         for (let ind = 0; ind < folders.length; ind++) {
-            if (this.navigationBar[folderIndex - 1].path !== "") {
-                this.navigationBar[folderIndex].path = this.navigationBar[folderIndex - 1].path;
+            if (this._navigationBar[folderIndex - 1].path !== "") {
+                this._navigationBar[folderIndex].path = this._navigationBar[folderIndex - 1].path;
             } else {
-                this.navigationBar[folderIndex].path = "";
+                this._navigationBar[folderIndex].path = "";
             }
-            this.navigationBar[folderIndex].title = this.navigationBar[folderIndex].folder;
+            this._navigationBar[folderIndex].title = this._navigationBar[folderIndex].folder;
             folderIndex++;
         }
     }
 
     public getElement(elementName: string) {
-        if (this.fileUtils.isFile(elementName)) {
+        if (this._fileUtils.isFile(elementName)) {
             const path = (this.currentPath === "" && this.currentFolder === "") ? "" : this.currentPath + "/" + this.currentFolder;
             this.fileService.downloadFile(this._userData._id, elementName, path)
                 .then(res => fileSaver.saveAs(res, elementName))
-                .catch(error => this.error = JSON.parse(error._body).error);
+                .catch(error => this._error = JSON.parse(error._body).error);
         } else {
             this.navigateToFolder(elementName);
         }
@@ -145,16 +145,16 @@ export class HomeComponent implements OnInit {
 
     public renameElement(elementName: string) {
         const path = (this.currentPath === "" && this.currentFolder === "") ? "" : this.currentPath + "/" + this.currentFolder;
-        this.fileService.renameElement(this.userData._id, elementName, this.newElementName, path)
+        this.fileService.renameElement(this.userData._id, elementName, this._newElementName, path)
             .then(() => this.displayFolderContents(this.currentFolder, this.currentPath))
-            .catch(error => this.error = JSON.parse(error._body).error);
+            .catch(error => this._error = JSON.parse(error._body).error);
     }
 
     public deleteElement(elementName: string) {
         const path = (this.currentPath === "" && this.currentFolder === "") ? "" : this.currentPath + "/" + this.currentFolder;
         this.fileService.deleteElement(this.userData._id, elementName, path)
             .then(() => this.displayFolderContents(this.currentFolder, this.currentPath))
-            .catch(error => this.error = JSON.parse(error._body).error);
+            .catch(error => this._error = JSON.parse(error._body).error);
     }
 
     public openDialogNewFile(): void {
@@ -212,12 +212,52 @@ export class HomeComponent implements OnInit {
         this.router.navigate(["/login"]);
     }
 
+    get pageTitle(): string {
+        return this._pageTitle;
+    }
+
+    set pageTitle(value: string) {
+        this._pageTitle = value;
+    }
+
+    get error(): Error {
+        return this._error;
+    }
+
+    set error(value: Error) {
+        this._error = value;
+    }
+
+    get newElementName(): string {
+        return this._newElementName;
+    }
+
+    set newElementName(value: string) {
+        this._newElementName = value;
+    }
+
+    get fileUtils(): FileUtils {
+        return this._fileUtils;
+    }
+
+    set fileUtils(value: FileUtils) {
+        this._fileUtils = value;
+    }
+
     get currentFolder(): string {
         return this._currentFolder;
     }
 
     set currentFolder(value: string) {
         this._currentFolder = value;
+    }
+
+    get navigationBar(): NavElement[] {
+        return this._navigationBar;
+    }
+
+    set navigationBar(value: NavElement[]) {
+        this._navigationBar = value;
     }
 
     get currentPath(): string {

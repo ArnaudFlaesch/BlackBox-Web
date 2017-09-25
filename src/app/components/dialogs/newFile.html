@@ -12,7 +12,7 @@
 
 <div class="form-group">
     <label for="newFileName">Nom du fichier</label>
-    <input type="text" class="form-control" name="name" required maxlength="255" #name="ngModel" [pattern]="this.fileNamePattern" [(ngModel)]="fileName" id="newFileName" placeholder="Nom du fichier">
+    <input type="text" class="form-control" name="name" required maxlength="255" #name="ngModel" [pattern]="fileNamePattern" [(ngModel)]="fileName" id="newFileName" placeholder="Nom du fichier">
 </div>
 
 <button class="btn btn-success" [disabled]="name.errors" (click)="createNewFile()">Créer le nouveau fichier</button>
