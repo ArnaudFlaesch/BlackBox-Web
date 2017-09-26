@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import {Headers, Http, ResponseContentType} from "@angular/http";
 import {environment} from "../../environments/environment";
 import "rxjs/Rx";
-import {UserFolderPermission} from "../model/UserFolderPermission";
+import {User} from "../model/user";
 
 @Injectable()
 export class FileService {
@@ -81,21 +81,21 @@ export class FileService {
     }
 
     public saveUserToSharedElement(userId: Number, elementName: string, currentPath: string,
-                                   newUserEmail: string, newUserId: Number, canDownload: Boolean, canUpload: Boolean): Promise<any> {
+                                   newUserEmail: string, newUserId: Number): Promise<any> {
         return this.http.post(this.SERVICE_ENDPOINT + "/saveSharedUser",
             {userId : userId, elementName: elementName, path: currentPath, sharedUserEmail: newUserEmail,
-                sharedUserId: newUserId, canDownload: canDownload, canUpload: canUpload},
+                sharedUserId: newUserId},
             {headers: this.headers})
             .toPromise()
             .then(response => response.json())
             .catch(this.handleError);
     }
 
-    public getUsersWhoShareElement(userId: Number, elementName: string, currentPath: string): Promise<UserFolderPermission[]> {
+    public getUsersWhoShareElement(userId: Number, elementName: string, currentPath: string): Promise<User[]> {
         return this.http.get(this.SERVICE_ENDPOINT + "/listOfSharedUsers",
             {headers: this.headers, params: {userId : userId, elementName: elementName, path: currentPath}})
             .toPromise()
-            .then(response => response.json() as UserFolderPermission)
+            .then(response => response.json() as User)
             .catch(this.handleError);
     }
 

@@ -1,8 +1,8 @@
 <ul [hidden]="listUsers.length === 0">
     <li *ngFor="let user of listUsers" >
-        <span>{{ user.sharedUserId }}</span>
-        <span>{{ user.canDownload }}</span>
-        <span>{{ user.canUpload }}</span>
+        <span>{{ user.firstname }} </span>
+        <span>{{ user.name }} </span>
+        <span>{{ user.email }}</span>
     </li>
 </ul>
 
@@ -19,10 +19,6 @@
     <div class="form-group">
         <label>Adresse mail de l'utilisateur: </label>
         <input class="form-control" name="email" required maxlength="255" #email="ngModel" [pattern]="emailPattern" [(ngModel)]="newSharedUserEmail" />
-        <label>Peut télécharger les fichiers</label>
-        <input type="checkbox" [(ngModel)]="checkCanDownload">
-        <label>Peut envoyer des fichiers</label>
-        <input type="checkbox" [(ngModel)]="checkCanUpload">
     </div>
     <button class="btn btn-success" [disabled]="email.errors" (click)="addUserToShareList()">Partager l'élement avec l'utilisateur</button>
 </div>

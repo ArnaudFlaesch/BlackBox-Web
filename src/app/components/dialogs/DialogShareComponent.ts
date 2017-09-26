@@ -2,7 +2,7 @@ import {AfterViewChecked, ChangeDetectorRef, Component, Inject, OnInit} from "@a
 import {MD_DIALOG_DATA, MdDialogRef} from "@angular/material";
 import {FileService} from "../../services/file.service";
 import {UserService} from "../../services/user.service";
-import {UserFolderPermission} from "../../model/UserFolderPermission";
+import {User} from "../../model/user";
 
 @Component({
     selector: "share",
@@ -12,11 +12,9 @@ export class DialogShareComponent  implements AfterViewChecked, OnInit {
 
     private _elementName: string;
     private _currentPath: string;
-    private _listUsers: UserFolderPermission[] = [];
+    private _listUsers: User[] = [];
     public emailPattern = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     private _newSharedUserEmail: string;
-    private _checkCanUpload: Boolean = false;
-    private _checkCanDownload: Boolean = false;
     public error: Error;
 
     constructor(private cdRef: ChangeDetectorRef, public dialogRef: MdDialogRef<DialogShareComponent>,
@@ -25,8 +23,8 @@ export class DialogShareComponent  implements AfterViewChecked, OnInit {
     }
 
     public addUserToShareList() {
-        this.fileService.saveUserToSharedElement(this.userService.getUserDataFromSession()._id, this.elementName, this.currentPath,
-            this.newSharedUserEmail, null, this._checkCanDownload, this._checkCanUpload)
+        this.fileService.saveUserToSharedElement(this.userService.getUserDataFromSession()._id,
+            this.elementName, this.currentPath, this.newSharedUserEmail, null)
             .then(() => this.getUsersListFromServer())
             .catch(error => this.error = error);
     }
@@ -41,28 +39,12 @@ export class DialogShareComponent  implements AfterViewChecked, OnInit {
 
     getUsersListFromServer() {
         this.fileService.getUsersWhoShareElement(this.userService.getUserDataFromSession()._id, this.elementName, this.currentPath)
-            .then(userList => this.listUsers = userList)
+            .then(userList =>this.listUsers = userList)
             .catch(error => this.error = error);
     }
 
     onNoClick(): void {
         this.dialogRef.close();
-    }
-
-    get checkCanUpload(): Boolean {
-        return this._checkCanUpload;
-    }
-
-    set checkCanUpload(value: Boolean) {
-        this._checkCanUpload = value;
-    }
-
-    get checkCanDownload(): Boolean {
-        return this._checkCanDownload;
-    }
-
-    set checkCanDownload(value: Boolean) {
-        this._checkCanDownload = value;
     }
 
     get newSharedUserEmail(): string {
@@ -81,11 +63,11 @@ export class DialogShareComponent  implements AfterViewChecked, OnInit {
         this._elementName = value;
     }
 
-    get listUsers(): UserFolderPermission[] {
+    get listUsers(): User[] {
         return this._listUsers;
     }
 
-    set listUsers(value: UserFolderPermission[]) {
+    set listUsers(value: User[]) {
         this._listUsers = value;
     }
 

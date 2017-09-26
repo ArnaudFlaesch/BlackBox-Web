@@ -8,6 +8,54 @@ export class FileUtils {
 
     public constructor() {}
 
+    public createNavigationTab(currentPath: string, currentFolder: string) {
+        let navigationBar = [];
+        if (currentPath !== "") {
+            const folders = (currentPath + "/" + currentFolder).split("/").filter(Boolean);
+            for (let ind = 0; ind < folders.length; ind++) {
+                navigationBar.push(new Element(folders[ind]));
+            }
+            navigationBar[0].title = "Mon dossier";
+            navigationBar[0].path = "";
+            for (let ind = 1; ind < folders.length; ind++) {
+                if (navigationBar[ind - 1].path !== "") {
+                    navigationBar[ind].path = "/" + navigationBar[ind - 1].path +  "/" + folders[ind];
+                } else {
+                    navigationBar[ind].path =  "/" + folders[ind - 1];
+                }
+                navigationBar[ind].title = navigationBar[ind].name;
+            }
+        } else {
+            navigationBar.push(new Element(""));
+            navigationBar[0].title = "Mon dossier";
+            navigationBar[0].path = "";
+        }
+        return (navigationBar);
+    }
+
+    public createSharedNavigationTab(currentPath: string, currentFolder: string) {
+        let navigationBar = [];
+        const folders = (currentPath + "/" + currentFolder).split("/").filter(Boolean);
+        navigationBar.push(new Element(""));
+        navigationBar[0].title = "Dossiers partagés";
+        navigationBar[0].name = "";
+        navigationBar[0].path = "";
+        for (let ind = 0; ind < folders.length; ind++) {
+            navigationBar.push(new Element(folders[ind]));
+        }
+        let folderIndex = 1;
+        for (let ind = 0; ind < folders.length; ind++) {
+            if (navigationBar[folderIndex - 1].path !== "") {
+                navigationBar[folderIndex].path = navigationBar[folderIndex - 1].path;
+            } else {
+                navigationBar[folderIndex].path = "";
+            }
+            navigationBar[folderIndex].title = navigationBar[folderIndex].name;
+            folderIndex++;
+        }
+        return (navigationBar);
+    }
+
     public filterList() {
         this.searchList = this.elementList
             .filter(element => element.indexOf(this._search) !== -1)

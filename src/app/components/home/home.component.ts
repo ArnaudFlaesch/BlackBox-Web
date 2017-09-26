@@ -1,10 +1,10 @@
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {UserService} from "../../services/user.service";
 import {Router} from "@angular/router";
+import {Element} from "../../model/element";
 import {User} from "../../model/user";
 import {FileService} from "../../services/file.service";
 import {MdDialog} from "@angular/material";
-import {NavElement} from "../../model/navElement";
 import {DialogNewFileComponent} from "../dialogs/DialogNewFileComponent";
 import {DialogNewFolderComponent} from "../dialogs/DialogNewFolderComponent";
 import {DialogUserInfoComponent} from "../dialogs/DialogUserInfoComponent";
@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
     private _currentPath = "";
     private _currentFolder = "";
     private _userData: User = new User();
-    private _navigationBar: NavElement[] = [];
+    private _navigationBar: Element[] = [];
     private isSharedFolderPage: Boolean = false;
     public fileNamePattern = /[^\\]*\.[a-zA-Z]{3}$/;
     public emailPattern = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
@@ -65,7 +65,7 @@ export class HomeComponent implements OnInit {
             .then(elementList => {
                 this._fileUtils.elementList = elementList;
                 this._fileUtils.filterList();
-                this.createSharedNavigationTab();
+                this.navigationBar = this.fileUtils.createSharedNavigationTab(this.currentPath, this.currentFolder);
             })
             .catch(error => this._error = error);
     }
@@ -77,7 +77,9 @@ export class HomeComponent implements OnInit {
                 this.currentPath = path;
                 this._fileUtils.elementList = elementList;
                 this._fileUtils.filterList();
-                (this.isSharedFolderPage) ? this.createSharedNavigationTab() : this.createNavigationTab();
+                this.navigationBar = (this.isSharedFolderPage)
+                    ? this.fileUtils.createSharedNavigationTab(this.currentPath, this.currentFolder)
+                    : this.fileUtils.createNavigationTab(this.currentPath, this.currentFolder);
             })
             .catch(error => this._error = error);
     }
@@ -85,52 +87,6 @@ export class HomeComponent implements OnInit {
     public navigateToFolder(elementName: string) {
         const path = (this.currentPath === "" && this.currentFolder === "") ? "" : this.currentPath += "/" + this.currentFolder;
         this.displayFolderContents(elementName, path);
-    }
-
-    public createNavigationTab() {
-        this._navigationBar = [];
-        if (this.currentPath !== "") {
-            const folders = (this.currentPath + "/" + this.currentFolder).split("/").filter(Boolean);
-            for (let ind = 0; ind < folders.length; ind++) {
-                this._navigationBar.push(new NavElement(folders[ind]));
-            }
-            this._navigationBar[0].title = "Mon dossier";
-            this._navigationBar[0].path = "";
-            for (let ind = 1; ind < folders.length; ind++) {
-                if (this._navigationBar[ind - 1].path !== "") {
-                    this._navigationBar[ind].path = "/" + this._navigationBar[ind - 1].path +  "/" + folders[ind];
-                } else {
-                    this._navigationBar[ind].path =  "/" + folders[ind - 1];
-                }
-                this._navigationBar[ind].title = this._navigationBar[ind].folder;
-            }
-        } else {
-            this._navigationBar.push(new NavElement(""));
-            this._navigationBar[0].title = "Mon dossier";
-            this._navigationBar[0].path = "";
-        }
-    }
-
-    public createSharedNavigationTab() {
-        this._navigationBar = [];
-        const folders = (this.currentPath + "/" + this.currentFolder).split("/").filter(Boolean);
-        this._navigationBar.push(new NavElement(""));
-        this._navigationBar[0].title = "Dossiers partagés";
-        this._navigationBar[0].folder = "";
-        this._navigationBar[0].path = "";
-        for (let ind = 0; ind < folders.length; ind++) {
-            this._navigationBar.push(new NavElement(folders[ind]));
-        }
-        let folderIndex = 1;
-        for (let ind = 0; ind < folders.length; ind++) {
-            if (this._navigationBar[folderIndex - 1].path !== "") {
-                this._navigationBar[folderIndex].path = this._navigationBar[folderIndex - 1].path;
-            } else {
-                this._navigationBar[folderIndex].path = "";
-            }
-            this._navigationBar[folderIndex].title = this._navigationBar[folderIndex].folder;
-            folderIndex++;
-        }
     }
 
     public getElement(elementName: string) {
@@ -253,11 +209,11 @@ export class HomeComponent implements OnInit {
         this._currentFolder = value;
     }
 
-    get navigationBar(): NavElement[] {
+    get navigationBar(): Element[] {
         return this._navigationBar;
     }
 
-    set navigationBar(value: NavElement[]) {
+    set navigationBar(value: Element[]) {
         this._navigationBar = value;
     }
 

@@ -1,6 +1,6 @@
-<div style="margin-top: 1%">
+<div style="background-color: grey; position: relative; height: 100%">
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-2" style="margin-top: 1%">
             <span class="list-group-item list-group-item-action active" data-toggle="list" role="tab" aria-controls="home">Bienvenue, {{userData.firstname}} {{userData.name}}</span>
             <br />
             <div class="list-group" id="list-tab" role="tablist">
@@ -19,7 +19,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <ol [hidden]="navigationBar.length === 0" class="breadcrumb">
-                        <li *ngFor="let navElement of navigationBar;  let ind = index;" (click)="displayFolderContents(navElement.folder, navElement.path)" [ngClass]="fileUtils.getBreadCrumbClasses(ind, navigationBar.length)">{{ navElement.title }}</li>
+                        <li *ngFor="let navElement of navigationBar;  let ind = index;" (click)="displayFolderContents(navElement.name, navElement.path)" [ngClass]="fileUtils.getBreadCrumbClasses(ind, navigationBar.length)">{{ navElement.title }}</li>
                     </ol>
                 </div>
                 <div class="col-md-3">
