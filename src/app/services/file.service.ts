@@ -53,6 +53,16 @@ export class FileService {
             .catch(this.handleError);
     }
 
+    public moveElement(userId: Number, moveOrCopy: Boolean, elementName: string, originFolder: string, originPath: string, destinationFolder: string, destinationPath: string) {
+        return this.http.post(this.SERVICE_ENDPOINT + "/moveElement",
+            {userId : userId, moveOrCopy: moveOrCopy, elementName : elementName, originFolder: originFolder, originPath: originPath,
+                destinationFolder: destinationFolder, destinationPath: destinationPath},
+            {headers: this.headers})
+            .toPromise()
+            .then(() => Promise.resolve())
+            .catch(this.handleError);
+    }
+
     public createNewFile(userId: Number, fileName: string, folderTo: string, currentPath: string): Promise<any> {
         return this.http.post(this.SERVICE_ENDPOINT + "/newFile",
             {userId : userId, elementName : fileName, folderTo: folderTo, path: currentPath},

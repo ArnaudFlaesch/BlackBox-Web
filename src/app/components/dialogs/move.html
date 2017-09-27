@@ -1,0 +1,22 @@
+<div *ngIf="error">
+    {{ error }}
+</div>
+
+<div class="row">
+    <ol [hidden]="navigationBar.length === 0" class="breadcrumb">
+        <li *ngFor="let navElement of navigationBar;  let ind = index;" (click)="displayFolderContents(navElement.name, navElement.path)" [ngClass]="fileUtils.getBreadCrumbClasses(ind, navigationBar.length)">{{ navElement.title }}</li>
+    </ol>
+</div>
+
+<span class="img-with-text" *ngFor="let element of fileUtils.searchList | orderBy : ['+element.name']" [contextMenu]="basicMenu" [contextMenuSubject]="element" (dblclick)="getElement(element.name)" style="margin : 0.5em">
+    <img [src]="'../assets/' + fileUtils.getIcon(element.name) + '_icon.png'" />
+    <span>{{ element.name }}</span>
+</span>
+
+<br />
+
+<div style="position: relative; top: 50%">
+    <button class="btn btn-success" (click)="moveElement(false)">Copier</button>
+    <span>  </span>
+    <button class="btn btn-success" (click)="moveElement(true)">Déplacer</button>
+</div>

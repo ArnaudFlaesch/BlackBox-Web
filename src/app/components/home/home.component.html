@@ -51,7 +51,7 @@
                     </ng-template>
                     <ng-template contextMenuItem let-item passive="true">
                         <div class="btn btn-primary" (click)="openDialogShare(item?.name)" *ngIf="currentPath === '' && currentFolder === ''">Partager</div>
-                        <div class="btn btn-primary">Déplacer</div>
+                        <div class="btn btn-primary" (click)="openDialogMove(item?.name)">Copier / Déplacer</div>
                         <div>
                             <input type="text" name="name" required maxlength="255" #name="ngModel" [pattern]="fileNamePattern" [(ngModel)]="newElementName">
                             <button class="btn btn-primary" (click)="renameElement(item?.name)">Renommer</button>

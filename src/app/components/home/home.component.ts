@@ -14,6 +14,7 @@ import {FileUtils} from "../../utils/FileUtils";
 import {DialogShareComponent} from "../dialogs/DialogShareComponent";
 
 import * as fileSaver from "file-saver";
+import {DialogMoveComponent} from "../dialogs/DialogMoveComponent";
 
 @Component({
     selector: "app-home",
@@ -162,6 +163,17 @@ export class HomeComponent implements OnInit {
         });
         dialogRef.componentInstance.elementName = elementName;
         dialogRef.componentInstance.currentPath = this.currentPath;
+    }
+
+    public openDialogMove(elementName: string): void {
+        const dialogRef = this.dialog.open(DialogMoveComponent, {
+            width: "40%",
+            height: "60%"
+        });
+        dialogRef.componentInstance.elementToMove = elementName;
+        dialogRef.componentInstance.originFolder = this.currentFolder;
+        dialogRef.componentInstance.originPath = this.currentPath;
+        dialogRef.componentInstance.isSharedFolderPage = this.isSharedFolderPage;
     }
 
     public logout() {

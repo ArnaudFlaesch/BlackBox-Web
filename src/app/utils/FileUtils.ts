@@ -8,7 +8,7 @@ export class FileUtils {
 
     public constructor() {}
 
-    public createNavigationTab(currentPath: string, currentFolder: string) {
+    public createNavigationTab(currentPath: string, currentFolder: string): Element[] {
         let navigationBar = [];
         if (currentPath !== "") {
             const folders = (currentPath + "/" + currentFolder).split("/").filter(Boolean);
@@ -33,7 +33,7 @@ export class FileUtils {
         return (navigationBar);
     }
 
-    public createSharedNavigationTab(currentPath: string, currentFolder: string) {
+    public createSharedNavigationTab(currentPath: string, currentFolder: string): Element[] {
         let navigationBar = [];
         const folders = (currentPath + "/" + currentFolder).split("/").filter(Boolean);
         navigationBar.push(new Element(""));
