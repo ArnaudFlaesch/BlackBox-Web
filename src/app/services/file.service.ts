@@ -80,20 +80,26 @@ export class FileService {
             .catch(this.handleError);
     }
 
-    public saveUserToSharedElement(userId: Number, elementName: string, currentPath: string,
-                                   newUserEmail: string, newUserId: Number): Promise<any> {
+    public getUsersWhoShareElement(userId: Number, elementName: string, currentPath: string): Promise<User[]> {
+        return this.http.get(this.SERVICE_ENDPOINT + "/listOfSharedUsers",
+            {headers: this.headers, params: {userId : userId, elementName: elementName, path: currentPath}})
+            .toPromise()
+            .then(response => response.json() as User)
+            .catch(this.handleError);
+    }
+
+    public saveUserToSharedElement(userId: Number, elementName: string, currentPath: string, newUserEmail: string): Promise<any> {
         return this.http.post(this.SERVICE_ENDPOINT + "/saveSharedUser",
-            {userId : userId, elementName: elementName, path: currentPath, sharedUserEmail: newUserEmail,
-                sharedUserId: newUserId},
+            {userId : userId, elementName: elementName, path: currentPath, sharedUserEmail: newUserEmail},
             {headers: this.headers})
             .toPromise()
             .then(response => response.json())
             .catch(this.handleError);
     }
 
-    public getUsersWhoShareElement(userId: Number, elementName: string, currentPath: string): Promise<User[]> {
-        return this.http.get(this.SERVICE_ENDPOINT + "/listOfSharedUsers",
-            {headers: this.headers, params: {userId : userId, elementName: elementName, path: currentPath}})
+    public removeAccessForUser(userId: Number, sharedUserId: Number, elementName: string, currentPath: string): Promise<any> {
+        return this.http.delete(this.SERVICE_ENDPOINT + "/deleteSharedUser",
+            {headers: this.headers, params: {userId : userId, sharedUserId : sharedUserId, elementName: elementName, path: currentPath}})
             .toPromise()
             .then(response => response.json() as User)
             .catch(this.handleError);

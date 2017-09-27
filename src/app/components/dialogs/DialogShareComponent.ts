@@ -22,13 +22,6 @@ export class DialogShareComponent  implements AfterViewChecked, OnInit {
                 private userService: UserService, private fileService: FileService) {
     }
 
-    public addUserToShareList() {
-        this.fileService.saveUserToSharedElement(this.userService.getUserDataFromSession()._id,
-            this.elementName, this.currentPath, this.newSharedUserEmail, null)
-            .then(() => this.getUsersListFromServer())
-            .catch(error => this.error = error);
-    }
-
     ngAfterViewChecked() {
         this.cdRef.detectChanges();
     }
@@ -37,14 +30,30 @@ export class DialogShareComponent  implements AfterViewChecked, OnInit {
         this.getUsersListFromServer();
     }
 
-    getUsersListFromServer() {
-        this.fileService.getUsersWhoShareElement(this.userService.getUserDataFromSession()._id, this.elementName, this.currentPath)
-            .then(userList =>this.listUsers = userList)
-            .catch(error => this.error = error);
-    }
-
     onNoClick(): void {
         this.dialogRef.close();
+    }
+
+    public getUsersListFromServer() {
+        this.fileService.getUsersWhoShareElement(this.userService.getUserDataFromSession()._id, this.elementName, this.currentPath)
+            .then(userList => this.listUsers = userList)
+            .catch(error => this.error = JSON.parse(error._body).error);
+    }
+
+    public addUserToShareList() {
+        this.fileService.saveUserToSharedElement(this.userService.getUserDataFromSession()._id,
+            this.elementName, this.currentPath, this.newSharedUserEmail)
+            .then(() => this.getUsersListFromServer())
+            .catch(error => this.error = JSON.parse(error._body).error);
+    }
+
+    public deleteAccess(sharedUserId: Number) {
+        this.fileService.removeAccessForUser(this.userService.getUserDataFromSession()._id, sharedUserId, this.elementName, this.currentPath)
+            .then(message => {
+                this.error = message.message;
+                this.getUsersListFromServer();
+            })
+            .catch(error => this.error = JSON.parse(error._body).error);
     }
 
     get newSharedUserEmail(): string {
