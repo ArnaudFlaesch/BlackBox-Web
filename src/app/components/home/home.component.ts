@@ -92,8 +92,8 @@ export class HomeComponent implements OnInit {
         this.displayFolderContents(elementName, path);
     }
 
-    public getElement(elementName: string) {
-        if (this._fileUtils.isFile(elementName)) {
+    public getElement(elementName: string, isFolder: Boolean) {
+        if (!isFolder) {
             const path = (this.currentPath === "" && this.currentFolder === "") ? "" : this.currentPath + "/" + this.currentFolder;
             this.fileService.downloadFile(this._userData._id, elementName, path)
                 .then(res => fileSaver.saveAs(res, elementName))

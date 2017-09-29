@@ -36,8 +36,8 @@
             </div>
 
             <div class="dropzone" appHome>
-                <span class="img-with-text" *ngFor="let element of fileUtils.searchList | orderBy : ['+element.name']" [contextMenu]="basicMenu" [contextMenuSubject]="element" (dblclick)="getElement(element.name)" style="margin : 0.5em">
-                    <img [src]="'../assets/' + fileUtils.getIcon(element.name) + '_icon.png'" />
+                <span class="img-with-text" *ngFor="let element of fileUtils.searchList | orderBy : ['+element.name']" [contextMenu]="basicMenu" [contextMenuSubject]="element" (dblclick)="getElement(element.name, element.isFolder)" style="margin : 0.5em">
+                    <img [src]="'../assets/' + fileUtils.getIcon(element.name, element.isFolder) + '_icon.png'" />
                     <span>{{ element.name }}</span>
                 </span>
                 <context-menu>

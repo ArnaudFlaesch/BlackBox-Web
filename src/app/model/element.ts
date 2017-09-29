@@ -1,8 +1,9 @@
 export class Element {
 
     private _name: string;
-    private _title: string;
     private _path: string;
+    private _title: string;
+    private _isFolder: Boolean;
 
     constructor(name: string) {
         this._name = name;
@@ -30,5 +31,13 @@ export class Element {
 
     set path(value: string) {
         this._path = value;
+    }
+
+    get isFolder(): Boolean {
+        return this._isFolder;
+    }
+
+    set isFolder(value: Boolean) {
+        this._isFolder = value;
     }
 }

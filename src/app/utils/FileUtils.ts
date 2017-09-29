@@ -3,13 +3,13 @@ import {Element} from "../model/element";
 export class FileUtils {
 
     private _search = "";
-    private _elementList: string[] = [];
+    private _elementList: Element[] = [];
     private _searchList: Element[] = [];
 
     public constructor() {}
 
     public createNavigationTab(currentPath: string, currentFolder: string): Element[] {
-        let navigationBar = [];
+        const navigationBar = [];
         if (currentPath !== "") {
             const folders = (currentPath + "/" + currentFolder).split("/").filter(Boolean);
             for (let ind = 0; ind < folders.length; ind++) {
@@ -34,7 +34,7 @@ export class FileUtils {
     }
 
     public createSharedNavigationTab(currentPath: string, currentFolder: string): Element[] {
-        let navigationBar = [];
+        const navigationBar = [];
         const folders = (currentPath + "/" + currentFolder).split("/").filter(Boolean);
         navigationBar.push(new Element(""));
         navigationBar[0].title = "Dossiers partagés";
@@ -58,16 +58,7 @@ export class FileUtils {
 
     public filterList() {
         this.searchList = this.elementList
-            .filter(element => element.indexOf(this._search) !== -1)
-            .map(element => new Element(element));
-    }
-
-    public isFile(elementName: string) {
-        if (elementName[elementName.length - 4] === "." || elementName[elementName.length - 5] === ".") {
-            return(true);
-        } else {
-            return(false);
-        }
+            .filter(element => element.name.indexOf(this._search) !== -1);
     }
 
     public getBreadCrumbClasses(currentIndex: number, length: number) {
@@ -78,8 +69,8 @@ export class FileUtils {
         }
     }
 
-    public getIcon(elementName: string): string {
-        if (this.isFile(elementName)) {
+    public getIcon(elementName: string, isFolder: Boolean): string {
+        if (!isFolder) {
             const index = (elementName[elementName.length - 4] === ".") ? 3 : 4;
             switch (elementName.substring(elementName.length, elementName.length - index)) {
                 case ("png"):
@@ -112,11 +103,11 @@ export class FileUtils {
         this._search = value;
     }
 
-    get elementList(): string[] {
+    get elementList(): Element[] {
         return this._elementList;
     }
 
-    set elementList(value: string[]) {
+    set elementList(value: Element[]) {
         this._elementList = value;
     }
 

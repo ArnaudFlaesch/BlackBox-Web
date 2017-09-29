@@ -3,6 +3,7 @@ import {Headers, Http, ResponseContentType} from "@angular/http";
 import {environment} from "../../environments/environment";
 import "rxjs/Rx";
 import {User} from "../model/user";
+import {Element} from "../model/Element";
 
 @Injectable()
 export class FileService {
@@ -14,12 +15,12 @@ export class FileService {
         this.headers.append("Accept", "*");
     }
 
-    public getContentFromFolder(userId: Number, elementName: string, path: string): Promise<string[]> {
+    public getContentFromFolder(userId: Number, elementName: string, path: string): Promise<Element[]> {
         return this.http
             .get(this.SERVICE_ENDPOINT + "/directory",
                 {headers: this.headers, params: {userId : userId, elementName : elementName, path: path}})
             .toPromise()
-            .then(res => res.json() as string[])
+            .then(res => res.json() as Element[])
             .catch(this.handleError);
     }
 

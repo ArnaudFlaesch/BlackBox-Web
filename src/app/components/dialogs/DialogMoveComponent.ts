@@ -59,8 +59,8 @@ export class DialogMoveComponent  implements AfterViewChecked, OnInit {
             .catch(error => this._error = error);
     }
 
-    public getElement(elementName: string) {
-        if (!this._fileUtils.isFile(elementName)) {
+    public getElement(elementName: string, isFolder: Boolean) {
+        if (!isFolder) {
             this.navigateToFolder(elementName);
         }
     }
