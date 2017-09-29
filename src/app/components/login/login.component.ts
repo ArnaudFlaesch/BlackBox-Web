@@ -27,7 +27,9 @@ export class LoginComponent implements AfterViewChecked {
     public logUser() {
         this.userService.login(this._credentials)
             .then(() => {
-                this.router.navigate(["/home"]);
+                this.router.navigate(["/home"])
+                    .then()
+                    .catch(error => this.error = error);
             })
             .catch(error => {
                 this.error = JSON.parse(error._body).error;

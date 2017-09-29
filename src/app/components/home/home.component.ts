@@ -42,7 +42,9 @@ export class HomeComponent implements OnInit {
 
     ngOnInit(): void {
         if (this.userService.getUserDataFromSession() == null) {
-            this.router.navigate(["/login"]);
+            this.router.navigate(["/login"])
+                .then()
+                .catch(error => this.error = error);
         } else {
             this._userData = this.userService.getUserDataFromSession();
             this.displayPersonnalFolder();

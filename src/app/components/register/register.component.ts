@@ -27,11 +27,11 @@ export class RegisterComponent implements AfterViewChecked {
             .then(user => {
                 this.userService.login(this.registeredUser)
                     .then(() => {
-                        this.router.navigate(["/home"]);
+                        this.router.navigate(["/home"])
+                            .then()
+                            .catch(error => this.error = error);
                     })
-                    .catch(error => {
-                        this.error = JSON.parse(error._body).error;
-                    });
+                    .catch(error => this.error = JSON.parse(error._body).error);
             })
             .catch(error => {
                 this.error = JSON.parse(error._body).error;
