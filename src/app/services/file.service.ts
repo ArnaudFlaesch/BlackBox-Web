@@ -3,7 +3,7 @@ import {Headers, Http, ResponseContentType} from "@angular/http";
 import {environment} from "../../environments/environment";
 import "rxjs/Rx";
 import {User} from "../model/user";
-import {Element} from "../model/Element";
+import {Element} from "../model/element";
 
 @Injectable()
 export class FileService {
