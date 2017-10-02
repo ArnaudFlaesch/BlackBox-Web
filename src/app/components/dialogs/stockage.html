@@ -1,21 +1,30 @@
 <h4>Gestion de l'espace de stockage</h4>
 
+<div style="color: red">
+    <div *ngIf="error">
+        {{ error }}
+    </div>
+</div>
+
 <br />
 
 <div>
-    <h5>Espace personnel</h5>
-    <p>Vous utilisez 50% de votre espace de stockage personnel (500Mo / 1Go)</p>
+    <h5>Utilisation de votre espace de stockage :</h5>
 
-    <br />
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'aria-valuenow': percentageSize, 'width': percentageSize + '%' }"
+             aria-valuemin="0" aria-valuemax="100">
+            <span class="sr-only">{{percentageSize}}% Complete</span>
+        </div>
+    </div>
 
-    <h5>Espace partagé</h5>
-    <p>Vous utilisez 50% de votre espace de stockage partagé (500Mo / 1Go)</p>
+    <p>Vous utilisez {{percentageSize.toFixed(2)}}% de votre espace de stockage ({{(storageSpace /  1024 / 1024 / 1024).toFixed(2)}} GB / {{maxStorageSpace /  1024 / 1024  / 1024}} GB)</p>
 
     <div *ngIf="!isPremiumUser">
-        <a href="http://localhost:3000/user/premium"><button class="btn btn-success">Passez au Premium pour 0.01€ seulement !</button></a>
+        <a href="{{premiumUrl}}"><button class="btn btn-success">Passez au Premium et doublez votre espace de stockage !</button></a>
     </div>
     <div *ngIf="isPremiumUser">
-        <p>Votre compte Premium expire le : {{ this.premiumDateOfExpiration | date: 'dd/MM/yyyy' }}</p>
+        <p>Votre compte Premium expire le : {{ premiumDateOfExpiration | date: 'dd/MM/yyyy' }}</p>
     </div>
 </div>
 

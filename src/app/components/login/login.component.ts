@@ -29,7 +29,7 @@ export class LoginComponent implements AfterViewChecked {
             .then(() => {
                 this.router.navigate(["/home"])
                     .then()
-                    .catch(error => this.error = error);
+                    .catch(error => this.error = JSON.parse(error._body).error);
             })
             .catch(error => {
                 this.error = JSON.parse(error._body).error;

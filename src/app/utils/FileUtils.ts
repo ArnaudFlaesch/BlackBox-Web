@@ -1,12 +1,18 @@
 import {Element} from "../model/element";
+import {FileService} from "../services/file.service";
+import {UserService} from "../services/user.service";
 
 export class FileUtils {
 
+    private _isSharedFolderPage: Boolean;
     private _search = "";
+    private _currentFolderOnly: Boolean = true;
+    private _lastModificationDateStart: Date = new Date();
+    private _lastModificationDateEnd: Date = new Date();
     private _elementList: Element[] = [];
     private _searchList: Element[] = [];
 
-    public constructor() {}
+    public constructor(private fileService: FileService, private userService: UserService) {}
 
     public createNavigationTab(currentPath: string, currentFolder: string): Element[] {
         const navigationBar = [];
@@ -57,7 +63,22 @@ export class FileUtils {
     }
 
     public filterList() {
-        this.searchList = this.elementList
+        let elementsToFilter;
+        const path = (this.isSharedFolderPage) ? "" : "/" + this.userService.getUserDataFromSession()._id.toString();
+        if (this.currentFolderOnly) {
+            elementsToFilter = this.elementList;
+            this.filterOptions(elementsToFilter);
+        } else {
+            this.fileService.searchElements(this.userService.getUserDataFromSession()._id, this._search, path)
+                .then(res => {
+                    this.filterOptions(res);
+                })
+                .catch(error => console.log(error));
+        }
+    }
+
+    public filterOptions(elementsToFilter: Element[]) {
+        this.searchList = elementsToFilter
             .filter(element => element.name.indexOf(this._search) !== -1);
     }
 
@@ -95,6 +116,30 @@ export class FileUtils {
         }
     }
 
+    get currentFolderOnly(): Boolean {
+        return this._currentFolderOnly;
+    }
+
+    set currentFolderOnly(value: Boolean) {
+        this._currentFolderOnly = value;
+    }
+
+    get lastModificationDateStart(): Date {
+        return this._lastModificationDateStart;
+    }
+
+    set lastModificationDateStart(value: Date) {
+        this._lastModificationDateStart = value;
+    }
+
+    get lastModificationDateEnd(): Date {
+        return this._lastModificationDateEnd;
+    }
+
+    set lastModificationDateEnd(value: Date) {
+        this._lastModificationDateEnd = value;
+    }
+
     get search(): string {
         return this._search;
     }
@@ -117,5 +162,13 @@ export class FileUtils {
 
     set searchList(value: Element[]) {
         this._searchList = value;
+    }
+
+    get isSharedFolderPage(): Boolean {
+        return this._isSharedFolderPage;
+    }
+
+    set isSharedFolderPage(value: Boolean) {
+        this._isSharedFolderPage = value;
     }
 }

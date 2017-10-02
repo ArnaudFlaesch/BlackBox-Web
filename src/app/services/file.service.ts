@@ -24,11 +24,19 @@ export class FileService {
             .catch(this.handleError);
     }
 
-    public getSharedFolders(userId: Number): Promise<any> {
+    public getSharedFolders(userId: Number): Promise<Element[]> {
         return this.http
             .get(this.SERVICE_ENDPOINT + "/sharedFolders", {headers: this.headers, params: {userId : userId }})
             .toPromise()
-            .then(folderList => folderList.json())
+            .then(folderList => folderList.json() as Element[])
+            .catch(this.handleError);
+    }
+
+    public searchElements(userId: Number, elementName: string, path: string): Promise<Element[]> {
+        return this.http.get(this.SERVICE_ENDPOINT + "/searchElements",
+            {headers: this.headers, params: {path: path, elementName: elementName, userId: userId}})
+            .toPromise()
+            .then(res => res.json() as Element[])
             .catch(this.handleError);
     }
 
@@ -88,6 +96,16 @@ export class FileService {
             {headers: this.headers})
             .toPromise()
             .then(response => response.json())
+            .catch(this.handleError);
+    }
+
+    public getUserSpace(userId: Number): Promise<any> {
+        return this.http
+            .post(this.SERVICE_ENDPOINT + "/getUserSpace",
+                {"userId": userId},
+                {headers: this.headers})
+            .toPromise()
+            .then(res => res.json())
             .catch(this.handleError);
     }
 

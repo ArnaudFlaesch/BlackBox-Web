@@ -6,7 +6,7 @@ export class User {
     password: string;
     isPremiumUser: Boolean;
     premiumDateOfExpiration: Date;
-    storageSpace: Number;
+    storageSpace: number;
 
   public User() {}
 }

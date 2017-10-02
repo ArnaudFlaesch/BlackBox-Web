@@ -19,11 +19,12 @@ export class DialogMoveComponent  implements AfterViewChecked, OnInit {
     private _navigationBar: Element[] = [];
     private _isSharedFolderPage: Boolean;
     private _error: Error;
-    private _fileUtils: FileUtils = new FileUtils();
+    private _fileUtils: FileUtils;
 
     constructor(private cdRef: ChangeDetectorRef, public dialogRef: MdDialogRef<DialogMoveComponent>,
                 @Inject(MD_DIALOG_DATA) public data: any,
                 private fileService: FileService, private userService: UserService) {
+        this.fileUtils = new FileUtils(this.fileService, this.userService);
     }
 
     ngAfterViewChecked() {

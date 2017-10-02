@@ -1,7 +1,10 @@
 <div style="background-color: grey; position: relative; height: 100%">
     <div class="row">
         <div class="col-md-2" style="margin-top: 1%">
-            <span class="list-group-item list-group-item-action active" data-toggle="list" role="tab" aria-controls="home">Bienvenue, {{userData.firstname}} {{userData.name}}</span>
+            <span class="list-group-item list-group-item-action active" data-toggle="list" role="tab" aria-controls="home">
+                Bienvenue, {{userData.firstname}} {{userData.name}}
+                <img src="../assets/premium_ico.png" [hidden] = !userData.isPremiumUser />
+            </span>
             <br />
             <div class="list-group" id="list-tab" role="tablist">
                 <a class="list-group-item list-group-item-action" data-toggle="list" role="tab" (click)="displayPersonnalFolder()">Dossier personnel</a>
@@ -29,16 +32,22 @@
                     </span>
                 </div>
                 <div class="col-md-3">
-                    <span>
+                    <div>
                         <input class="form-control" type="text" (keyup)="fileUtils.filterList()" [(ngModel)]="fileUtils.search" placeholder="Rechercher un fichier ou un dossier" aria-label="Search">
-                    </span>
+                        <span>
+                            <div>
+                                <label>Dossier courant uniquement</label>
+                                <input type="checkbox" (change)="fileUtils.filterList()" [(ngModel)]="fileUtils.currentFolderOnly">
+                            </div>
+                        </span>
+                    </div>
                 </div>
             </div>
 
             <div class="dropzone" appHome>
                 <span class="img-with-text" *ngFor="let element of fileUtils.searchList | orderBy : ['+element.name']" [contextMenu]="basicMenu" [contextMenuSubject]="element" (dblclick)="getElement(element.name, element.isFolder)" style="margin : 0.5em">
-                    <img [src]="'../assets/' + fileUtils.getIcon(element.name, element.isFolder) + '_icon.png'" />
-                    <span>{{ element.name }}</span>
+                    <img [src]="'../assets/' + fileUtils.getIcon(element.name, element.isFolder) + '_icon.png'" data-toggle="tooltip" title="{{element.name}}" />
+                    <span>{{ shrinkName(element.name) }}</span>
                 </span>
                 <context-menu>
                     <ng-template>

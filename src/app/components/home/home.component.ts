@@ -29,16 +29,18 @@ export class HomeComponent implements OnInit {
     private _currentFolder = "";
     private _userData: User = new User();
     private _navigationBar: Element[] = [];
-    private isSharedFolderPage: Boolean = false;
+    private _isSharedFolderPage: Boolean = false;
     public fileNamePattern = /[^\\]*\.[a-zA-Z]{3}$/;
     public emailPattern = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     private _newElementName = "";
     private _error: Error;
-    private _fileUtils: FileUtils = new FileUtils();
+    private _fileUtils: FileUtils;
 
     @ViewChild(ContextMenuComponent) public basicMenu: ContextMenuComponent;
 
-    constructor(public dialog: MdDialog, private userService: UserService, private fileService: FileService, private router: Router) {}
+    constructor(public dialog: MdDialog, private userService: UserService, private fileService: FileService, private router: Router) {
+        this.fileUtils = new FileUtils(this.fileService, this.userService);
+    }
 
     ngOnInit(): void {
         if (this.userService.getUserDataFromSession() == null) {
@@ -53,7 +55,8 @@ export class HomeComponent implements OnInit {
 
     public displayPersonnalFolder() {
         this._pageTitle = "Dossier personnel";
-        this.isSharedFolderPage = false;
+        this._isSharedFolderPage = false;
+        this.fileUtils.isSharedFolderPage = false;
         this.currentPath = "";
         this.currentFolder = this._userData._id.toString();
         this.displayFolderContents(this.currentFolder, this.currentPath);
@@ -61,7 +64,8 @@ export class HomeComponent implements OnInit {
 
     public displaySharedFolders() {
         this._pageTitle = "Dossiers partagés";
-        this.isSharedFolderPage = true;
+        this._isSharedFolderPage = true;
+        this.fileUtils.isSharedFolderPage = true;
         this.currentFolder = "";
         this.currentPath = "";
         this.fileService.getSharedFolders(this._userData._id)
@@ -80,7 +84,7 @@ export class HomeComponent implements OnInit {
                 this.currentPath = path;
                 this._fileUtils.elementList = elementList;
                 this._fileUtils.filterList();
-                this.navigationBar = (this.isSharedFolderPage)
+                this.navigationBar = (this._isSharedFolderPage)
                     ? this.fileUtils.createSharedNavigationTab(this.currentPath, this.currentFolder)
                     : this.fileUtils.createNavigationTab(this.currentPath, this.currentFolder);
             })
@@ -115,6 +119,14 @@ export class HomeComponent implements OnInit {
         this.fileService.deleteElement(this.userData._id, elementName, path)
             .then(() => this.displayFolderContents(this.currentFolder, this.currentPath))
             .catch(error => this._error = JSON.parse(error._body).error);
+    }
+
+    public shrinkName(elementName: string): string {
+        if (elementName.length > 14) {
+            return (elementName.substring(0, 13));
+        } else {
+            return (elementName);
+        }
     }
 
     public openDialogNewFile(): void {
@@ -157,6 +169,7 @@ export class HomeComponent implements OnInit {
         });
         dialogRef.componentInstance.isPremiumUser = this.userData.isPremiumUser;
         dialogRef.componentInstance.premiumDateOfExpiration = this.userData.premiumDateOfExpiration;
+        dialogRef.componentInstance.maxStorageSpace = this.userData.storageSpace;
     }
 
     public openDialogShare(elementName: string): void {
@@ -175,7 +188,7 @@ export class HomeComponent implements OnInit {
         dialogRef.componentInstance.elementToMove = elementName;
         dialogRef.componentInstance.originFolder = this.currentFolder;
         dialogRef.componentInstance.originPath = this.currentPath;
-        dialogRef.componentInstance.isSharedFolderPage = this.isSharedFolderPage;
+        dialogRef.componentInstance.isSharedFolderPage = this._isSharedFolderPage;
     }
 
     public logout() {
@@ -241,5 +254,13 @@ export class HomeComponent implements OnInit {
 
     get userData(): User {
         return this._userData;
+    }
+
+    get isSharedFolderPage(): Boolean {
+        return this._isSharedFolderPage;
+    }
+
+    set isSharedFolderPage(value: Boolean) {
+        this._isSharedFolderPage = value;
     }
 }
