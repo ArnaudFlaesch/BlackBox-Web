@@ -34,7 +34,10 @@ export class DndDirective {
         } else {
             path = (this.homeComponent.currentPath + "/" + this.homeComponent.currentFolder);
         }
-        this.fileService.uploadFiles(evt.dataTransfer.files, path, this.homeComponent.userData._id);
+        this.fileService.uploadFiles(evt.dataTransfer.files, path, this.homeComponent.userData._id)
+            .catch(error => {
+                this.homeComponent.error = JSON.parse(error._body).error;
+            });
         this.homeComponent.displayFolderContents(this.homeComponent.currentFolder, this.homeComponent.currentPath);
     }
 }
