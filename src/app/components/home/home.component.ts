@@ -48,7 +48,7 @@ export class HomeComponent implements OnInit {
                 .then()
                 .catch(error => this.error = error);
         } else {
-            this._userData = this.userService.getUserDataFromSession();
+            this.userData = this.userService.getUserDataFromSession();
             this.displayPersonnalFolder();
         }
     }
@@ -58,7 +58,7 @@ export class HomeComponent implements OnInit {
         this._isSharedFolderPage = false;
         this.fileUtils.isSharedFolderPage = false;
         this.currentPath = "";
-        this.currentFolder = this._userData._id.toString();
+        this.currentFolder = this.userData._id.toString();
         this.displayFolderContents(this.currentFolder, this.currentPath);
     }
 
@@ -254,6 +254,10 @@ export class HomeComponent implements OnInit {
 
     get userData(): User {
         return this._userData;
+    }
+
+    set userData(value: User) {
+        this._userData = value;
     }
 
     get isSharedFolderPage(): Boolean {
